@@ -1,0 +1,2 @@
+#!/bin/bash
+sxiv -atr "$@" & xdotool key Super+6 

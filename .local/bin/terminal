@@ -1,0 +1,7 @@
+#!/bin/bash
+xdotool key Super+5
+st-arc \
+-c Terminal \
+-n Terminal \
+-t Terminal \
+#-g 89x29

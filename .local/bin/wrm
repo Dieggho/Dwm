@@ -1,0 +1,95 @@
+#!/bin/bash
+
+# This script needs the following packages to work
+# "xorg-xwininfo" and "xdotool"
+# Please install them before trying to run it
+# 
+
+# Set distance
+d=20
+
+# Getting windo id
+win=`xdotool getactivewindow`
+
+# Getting Width and Height with Positions Y and X on the screen
+w=`xwininfo -id $win | grep "Width" | awk '{print $2}'`
+h=`xwininfo -id $win | grep "Height" | awk '{print $2}'`
+y=`xwininfo -id $win | grep 'Absolute upper-left Y' | awk '{print $4}'`
+x=`xwininfo -id $win | grep 'Absolute upper-left X' | awk '{print $4}'`
+
+function plus_w(){
+	xdotool windowsize $win \
+	`expr $w + $d` \
+	`expr $h`
+}
+
+function minus_w(){
+	xdotool windowsize $win \
+	`expr $w - $d` \
+	`expr $h`
+}
+
+function plus_h(){
+	xdotool windowsize $win \
+	`expr $w` \
+	`expr $h + $d`
+}
+
+function minus_h(){
+	xdotool windowsize $win \
+	`expr $w` \
+	`expr $h - $d`
+}
+
+function right(){
+	xdotool windowmove $win \
+	`expr $x + $d` \
+	`expr $y`
+}
+
+function left(){
+	xdotool windowmove $win \
+	`expr $x - $d` \
+	`expr $y`
+}
+
+function down(){
+	xdotool windowmove $win \
+	`expr $x` \
+	`expr $y + $d`
+}
+
+function up(){
+	xdotool windowmove $win \
+	`expr $x` \
+	`expr $y - $d`
+}
+
+while true
+do
+	if [ -z "$1" ] || [ $1 != "plus_w" -a $1 != "minus_w" -a $1 != "plus_h" -a $1 != "minus_h" -a $1 != "right" -a $1 != "left" -a $1 != "down" -a $1 != "up" -a $1 != "-h" ]
+	then
+		echo "This script needs arguments"
+		echo "wrm -h will show them"
+		break
+
+	elif [ $1 == "-h" ]
+	then
+		echo "usage: wrm [argument]"
+		echo "arguments:"
+		echo "plus_w		increases widht"
+		echo "plus_h		increases height"
+		echo "minus_w		decreases widht"
+		echo "minus_h		decreases height"
+		echo "right		moves right"
+		echo "left		moves left"
+		echo "up		moves up"
+		echo "down		moves down"
+
+	else
+		$1
+	fi 
+break
+done
+
+xdotool mousemove `expr $x + 45` `expr $y + 45`

@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo cp /usr/share/gtk-3.0/settings.ini.bak /usr/share/gtk-3.0/settings.ini
+sudo cp /usr/share/gtk-2.0/gtkrc.bak /usr/share/gtk-2.0/gtkrc

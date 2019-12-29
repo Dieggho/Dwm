@@ -1,0 +1,3 @@
+#!/bin/bash
+dwmc viewex 5
+sxiv -t /usr/share/backgrounds/*

@@ -1,0 +1,7 @@
+#!/bin/bash
+xdotool key Super+5
+st			\
+-n Root-Terminal	\
+-t Root-terminal	\
+-c root-terminal	\
+-e sudo bash

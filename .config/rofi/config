@@ -1,0 +1,12 @@
+rofi.font: Sans 9
+rofi.display-window: Window
+rofi.display-drun: Search
+rofi.me-accept-entry: MousePrimary
+rofi.me-select-entry: MouseDPrimary
+rofi.location: 1
+rofi.yoffset: 19
+rofi.lines: 13
+
+
+rofi.theme: /home/void/.config/rofi/Arc-Dark.rasi
+rofi.columns: 2

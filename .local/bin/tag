@@ -1,0 +1,40 @@
+#!/bin/bash
+# 
+# The script must be used on DWM with the "ewmhtags" patch applied
+# it also requires "xdotool" installed
+# it's a workaround for the case you can't apply the patch "nextprev"  
+#
+#
+
+desk=$(xprop -root | grep "_NET_CURRENT_DESKTOP(CARDINAL)" | awk '{print $3}')
+
+function next() {
+	xdotool key Super+`expr $desk + 2`
+}
+
+function prev() {
+	xdotool key Super+$desk
+}
+
+
+if [ -z "$1" ] || [ $1 != "next" -a $1 != "prev" ] 
+then
+	echo "The only accepted entries are 'prev' or 'next'"
+
+elif [ $desk == 0 ] # this line prevent xdotool to select all tags
+then
+	next
+
+elif [ $desk == 6 ] # change this line to 8 if you use 9 tags
+then
+	prev
+
+elif [ $1 == "next" ]
+then
+	$1
+
+else
+
+	$1
+
+fi

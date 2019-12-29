@@ -1,0 +1,12 @@
+# UUID=d7bb614b-195f-411d-9dd7-997b1b5e9563
+/dev/mapper/root        /               ext4            rw,relatime                                                                                                     0 1
+
+# UUID=576B-9D56
+/dev/sda1               /boot           vfat            rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro       0 2
+
+# zram
+/dev/zram0		none		swap		defaults                                                                                                        0 0
+/dev/zram1		none		swap		defaults                                                                                                        0 0
+
+# tmpfs
+tmpfs			/home/void/Desktop/RAM  tmpfs	rw,size=4G,nr_inodes=5k,noexec,nodev,nosuid,uid=void,gid=void,mode=1700                                         0 0

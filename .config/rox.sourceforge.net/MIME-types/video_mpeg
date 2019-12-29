@@ -1,0 +1,2 @@
+#! /bin/sh
+exec ffplay "$@" & xdotool key Super+6

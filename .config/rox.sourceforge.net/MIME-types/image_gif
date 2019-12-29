@@ -1,0 +1,2 @@
+#! /bin/sh
+exec sxiv -a "$@" & xdotool key Super+6

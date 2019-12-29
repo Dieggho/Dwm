@@ -1,0 +1,2 @@
+#! /bin/sh
+exec leafpad "$@" & xdotool key Super+4

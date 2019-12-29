@@ -1,0 +1,2 @@
+#! /bin/sh
+exec firefox "$@" & xdotool key Super+4

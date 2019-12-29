@@ -1,0 +1,2 @@
+#! /bin/sh
+exec transmission-gtk "$@" & xdotool key Super+3

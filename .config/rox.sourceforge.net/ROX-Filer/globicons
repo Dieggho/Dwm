@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<special-files>
+  <rule match="/home/void/mtpAndroid">
+    <icon>/home/void/.icons/mtp.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/.application_x-cd-image/mount">
+    <icon>/home/void/.icons/ROX/MIME/inode-blockdevice.png</icon>
+  </rule>
+  <rule match="/home/void/Packages">
+    <icon>/usr/share/icons/Arc/places/48/folder-documents.png</icon>
+  </rule>
+  <rule match="/home/void/Templates">
+    <icon>/usr/share/icons/Arc/places/48/folder-templates.png</icon>
+  </rule>
+  <rule match="/home/void/RAM/Pictures.tar">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads/tor-browser-linux64-8.5_en-US.tar.xz">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/shred-doc">
+    <icon>/home/void/.icons/shred.png</icon>
+  </rule>
+  <rule match="/home/void/config/rox.sourceforge.net/SendTo/extract">
+    <icon>/home/void/.icons/ROX/MIME/application-x-bzip-compressed-tar.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/.inode_blockdevice/mount">
+    <icon>/home/void/.icons/ROX/MIME/inode-blockdevice.png</icon>
+  </rule>
+  <rule match="/home/void/Devices/Media">
+    <icon>/usr/share/icons/Arc/devices/48/media-flash.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads/Telegram Desktop.7z">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads/Telegram Desktop.tar.7z">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void">
+    <icon>/usr/share/icons/Arc/places/48/user-home.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/xarch">
+    <icon>/usr/share/icons/Adwaita/48x48/mimetypes/x-package-repository.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/extract">
+    <icon>/home/void/.icons/ROX/MIME/application-x-compressed-tar.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads/Telegram Desktop.tar.lzma">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/Videos">
+    <icon>/usr/share/icons/Arc/places/48/folder-videos.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/.inode_directory/xarch">
+    <icon>/usr/share/icons/Adwaita/48x48/mimetypes/x-package-repository.png</icon>
+  </rule>
+  <rule match="/home/void/RAM/Downloads">
+    <icon>/usr/share/icons/Arc/places/48/folder-download.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/compress-archive">
+    <icon>/usr/share/icons/Adwaita/48x48/mimetypes/x-package-repository.png</icon>
+  </rule>
+  <rule match="/home/void/Packages/config/rox.sourceforge.net/SendTo/xarch">
+    <icon>/usr/share/icons/Adwaita/48x48/mimetypes/x-package-repository.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads">
+    <icon>/usr/share/icons/Arc/places/48/folder-download.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads/R-AFOP (09).rar">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/.video_webm/conv2mp3">
+    <icon>/home/void/.icons/mp3converter.png</icon>
+  </rule>
+  <rule match="/home/void/Desktop/Android Device">
+    <icon>/usr/share/icons/Adwaita/48x48/devices/phone.png</icon>
+  </rule>
+  <rule match="/home/void/Pictures">
+    <icon>/usr/share/icons/Arc/places/48/folder-pictures.png</icon>
+  </rule>
+  <rule match="/home/void/Downloads/Telegram Desktop.tar">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/Desktop/Phone">
+    <icon>/home/void/.icons/mtp.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/.video_mp4/conv2mp3">
+    <icon>/home/void/.icons/mp3converter.png</icon>
+  </rule>
+  <rule match="/home/void/Desktop">
+    <icon>/usr/share/icons/Arc/places/48/user-desktop.png</icon>
+  </rule>
+  <rule match="/home/void/Music">
+    <icon>/usr/share/icons/Arc/places/48/folder-music.png</icon>
+  </rule>
+  <rule match="/home/void/config/rox.sourceforge.net/SendTo/compress-archive">
+    <icon>/usr/share/icons/Arc/mimetypes/48@2x/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/config/rox.sourceforge.net/SendTo/shred-doc">
+    <icon>/home/void/.icons/shred.png</icon>
+  </rule>
+  <rule match="/home/void/RAM/Pictures.7z">
+    <icon>/usr/share/icons/Arc/mimetypes/48/package-x-generic.png</icon>
+  </rule>
+  <rule match="/home/void/Documents">
+    <icon>/usr/share/icons/Arc/places/48/folder-documents.png</icon>
+  </rule>
+  <rule match="/home/void/RAM">
+    <icon>/home/void/.icons/ram.png</icon>
+  </rule>
+  <rule match="/home/void/Desktop/RAM">
+    <icon>/home/void/.icons/ram.png</icon>
+  </rule>
+  <rule match="/home/void/Desktop/Media">
+    <icon>/usr/share/icons/Arc/devices/48/media-flash.png</icon>
+  </rule>
+  <rule match="/home/void/.config/rox.sourceforge.net/SendTo/.inode_directory/sxiv">
+    <icon>/home/void/.icons/sxiv.png</icon>
+  </rule>
+</special-files>

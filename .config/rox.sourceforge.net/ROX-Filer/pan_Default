@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<panel side="Top">
+  <options style="2" width="22" avoid="0" xinerama="0" monitor="0"/>
+  <start>
+    <icon label="Home">~</icon>
+    <icon label="Apps">/usr/share</icon>
+  </start>
+  <end/>
+</panel>

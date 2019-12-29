@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Wallpaper
+GenericName=Change Wallpaper with Feh
+Icon=preferences-desktop-wallpaper
+Exec=feh --bg-fill
+Terminal=false
+Type=Application
+Categories=Settings;
+StartupNotify=true

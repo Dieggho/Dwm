@@ -134,6 +134,8 @@ static const char *up[] =                    { "wrm", "up", NULL };
 static const char *down[] =                  { "wrm", "down", NULL };
 static const char *left[] =                  { "wrm", "left", NULL };
 static const char *right[] =                 { "wrm", "right", NULL };
+static const char *next[] =                  { "tag", "next", NULL };
+static const char *prev[] =                  { "tag", "prev", NULL };
 static const char *rooterm[] =               { "root-terminal", NULL };
 
 static Key keys[] = {
@@ -184,13 +186,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ Mod5Mask,                     XK_comma,  focusmon,       {.i = -1 } },
 	{ Mod5Mask,                     XK_period, focusmon,       {.i = +1 } },
 	{ Mod5Mask|ShiftMask,           XK_comma,  tagmon,         {.i = -1 } },
 	{ Mod5Mask|ShiftMask,           XK_period, tagmon,         {.i = +1 } },
 	{ MODKEY,		        XK_x,      spawn,          {.v = morc} },
+	{ MODKEY,                       XK_q,      spawn,          {.v = prev} },
+	{ MODKEY,                       XK_e,      spawn,          {.v = next} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -232,8 +234,8 @@ static Button buttons[] = {
 	{ ClkTagBar,            0,              Button3,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
-	{ ClkTagBar,            0,              Button4,        view,           {0} },
-	{ ClkTagBar,            0,              Button5,        view,           {0} },
+        { ClkTagBar,            0,              Button4,        spawn,		{.v = prev } },
+	{ ClkTagBar,            0,              Button5,        spawn,		{.v = next } },
         { ClkRootWin,           0,              Button1,        movemouse,      {0} },
         { ClkRootWin,           0,              Button3,        resizemouse,    {0} },
         { ClkRootWin,           0,              Button2,        killclient,     {0} },

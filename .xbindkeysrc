@@ -1,0 +1,95 @@
+###########################
+# xbindkeys configuration #
+###########################
+
+"xbindkeys --poll-rc; notify-send 'Xbindkey reloaded'"
+	Mod5 + BackSpace
+
+"terminal"
+	Mod5 + Return
+
+"xdotool windowkill `xdotool getactivewindow`"
+        Mod5 + k
+
+"smart-terminal"
+	Control + Alt + t
+
+"dmenu_run -fn 'Sans-8' -nb '#2B2E37' -nf '#d8d8d8' -sb '#5294E2' -sf '#d8d8d8'"
+	Mod5 + p
+
+"screenshot"
+	Print
+
+"amixer set Master 3-"
+	XF86AudioLowerVolume
+
+"amixer set Master 3+"
+	XF86AudioRaiseVolume
+
+"amixer sset Master toggle"
+	XF86AudioMute
+
+"firefox"
+	Mod5 + f
+
+"rox"
+	Mod5 + r
+
+"deadbeef"
+	Mod5 + d
+
+"telegram-desktop"
+	Mod5 + t
+
+"st-arc -e connmanctl"
+	Mod5 + n
+
+"python-shell"
+	Mod5 + Shift + p
+
+"wallpaper"
+	Mod5 + w
+
+"session-manager"
+	Mod5 + s
+
+"mtp"
+	Mod5 + a
+
+"lxtask"
+	Mod5 + m
+
+"editor"
+	Mod5 + l
+
+##################################
+#     Window resize and move     #
+##################################
+
+"wrm up"
+	Mod5 + Up
+
+"wrm down"
+	Mod5 + Down
+
+"wrm left"
+	Mod5 + Left
+
+"wrm right"
+	Mod5 + Right
+
+"wrm minus_h"
+	Mod5 + Shift +  Up
+
+"wrm plus_h"
+	Mod5 + Shift +  Down
+
+"wrm minus_w"
+	Mod5 + Shift +  Left
+
+"wrm plus_w"
+	Mod5 + Shift +  Right
+
+##################################
+# End of xbindkeys configuration #
+##################################

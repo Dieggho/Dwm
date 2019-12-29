@@ -1,0 +1,36 @@
+#!/bin/bash
+
+OPTIONS="\
+ Tile \n\
+ Floating \n\
+ Monocle"
+
+LAUNCHER="		\
+dmenu 			\
+-fn 'Sans-8' 		\
+-y 19			\
+-l 10 			\
+-x 340			\
+-w 100 			
+"
+
+option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
+if [ ${#option} -gt 0 ]
+then
+    case $option in
+      Exit)
+        eval $1
+        ;;
+             )
+        xdotool key Super+t
+        ;;
+            )
+        xdotool key Super+f
+        ;;
+            )
+        xdotool key Super+m
+        ;;
+      *)
+        ;;
+    esac
+fi

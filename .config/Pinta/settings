@@ -1,0 +1,14 @@
+﻿<settings>
+  <setting name="window-size-width" type="System.Int32">1360</setting>
+  <setting name="window-size-height" type="System.Int32">743</setting>
+  <setting name="ruler-metric" type="System.Int32">0</setting>
+  <setting name="window-maximized" type="System.Boolean">True</setting>
+  <setting name="ruler-shown" type="System.Boolean">True</setting>
+  <setting name="toolbar-shown" type="System.Boolean">False</setting>
+  <setting name="pixel-grid-shown" type="System.Boolean">False</setting>
+  <setting name="last-dialog-directory" type="System.String">/home/void/Downloads</setting>
+  <setting name="jpg-quality" type="System.Int32">100</setting>
+  <setting name="new-image-width" type="System.Int32">1366</setting>
+  <setting name="new-image-height" type="System.Int32">768</setting>
+  <setting name="default-image-type" type="System.String">jpg</setting>
+</settings>

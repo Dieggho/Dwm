@@ -1,0 +1,3 @@
+#!/bin/bash
+udevil mount -b "$@"
+notify-send "Device Mounted" "$@ successfully mountend on /media"

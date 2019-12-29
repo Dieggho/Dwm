@@ -136,6 +136,7 @@ static const char *left[] =                  { "wrm", "left", NULL };
 static const char *right[] =                 { "wrm", "right", NULL };
 static const char *next[] =                  { "tag", "next", NULL };
 static const char *prev[] =                  { "tag", "prev", NULL };
+static const char *layout[] =               { "layouts", NULL };
 static const char *rooterm[] =               { "root-terminal", NULL };
 
 static Key keys[] = {
@@ -212,7 +213,7 @@ static Button buttons[] = {
 	{ ClkButton,            0,              Button2,        spawn,          {.v = file } },
         { ClkButton,            0,              Button3,        spawn,          {.v = sessmgr } },
         { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button2,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,              Button2,        spawn,          {.v = layout } },
 	{ ClkLtSymbol,          0,              Button3,        togglefloating, {0} },
 	{ ClkLtSymbol,          0,              Button4,        pushup,         {.i = -1 } },
 	{ ClkLtSymbol,          0,              Button5,      	pushdown,       {.i = +1 } },

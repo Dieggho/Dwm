@@ -212,6 +212,8 @@ static Button buttons[] = {
         { ClkButton,		0,		Button1,	spawn,		{.v = morc } },
 	{ ClkButton,            0,              Button2,        spawn,          {.v = file } },
         { ClkButton,            0,              Button3,        spawn,          {.v = sessmgr } },
+        { ClkButton,            0,              Button4,        incnmaster,     {.i = +1 } },
+        { ClkButton,            0,              Button5,        incnmaster,     {.i = -1 } },
         { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button2,        spawn,          {.v = layout } },
 	{ ClkLtSymbol,          0,              Button3,        togglefloating, {0} },

@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 0.1
 xdotool key Super+5
 st-arc \
 -c Terminal \

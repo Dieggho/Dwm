@@ -1,3 +1,4 @@
 #!/bin/bash
-dwmc viewex 5
+sleep 0.1
+xdotool key Super+6
 sxiv -t /usr/share/backgrounds/*

@@ -39,6 +39,7 @@ unset TERMCAP
 # Man is much better than us at figuring this out
 unset MANPATH
 
+export LANG=en_US.UTF-8
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_PLATFORMTHEME=qt5ct
 export QT_PLATFORM_PLUGIN=qt5ct

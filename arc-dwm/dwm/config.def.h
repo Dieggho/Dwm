@@ -114,6 +114,8 @@ static const char *morc[] =                  { "dwmenu", NULL };
 static const char *sessmgr[] =               { "session-manager", NULL }; 
 static const char *nwmgr[] =                 { "nwmgr", NULL };
 static const char *connman[] =               { "st-arc", "-t", "Connman", "-e", "connmanctl", NULL };
+//static const char *vup[] =                   { "pactl", "set-sink-volume", "0", "+5%", NULL }; /* use it with Pulseaudio */
+//static const char *vdown[] =                 { "pactl", "set-sink-volume", "0", "-5%", NULL }; /* use it with Pulseaudio */
 static const char *vup[]   =                 { "amixer", "set", "Master", "3+",     NULL }; /* use it with Alsa-Utils */
 static const char *vdown[] =                 { "amixer", "set", "Master", "3-",     NULL }; /* use it with Alsa-Utils */
 static const char *gcal[] =                  { "gsimplecal", NULL };
@@ -136,8 +138,8 @@ static const char *left[] =                  { "wrm", "left", NULL };
 static const char *right[] =                 { "wrm", "right", NULL };
 static const char *next[] =                  { "tag", "next", NULL };
 static const char *prev[] =                  { "tag", "prev", NULL };
-static const char *layout[] =               { "layouts", NULL };
 static const char *rooterm[] =               { "root-terminal", NULL };
+static const char *alt_gr[]  =               { "alt_gr", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -215,7 +217,8 @@ static Button buttons[] = {
         { ClkButton,            0,              Button4,        incnmaster,     {.i = +1 } },
         { ClkButton,            0,              Button5,        incnmaster,     {.i = -1 } },
         { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,              Button2,        spawn,          {.v = layout } },
+	{ ClkLtSymbol,          0,              Button2,        setlayout,      {.v = &layouts[2]} },
+	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[1]} },
 	{ ClkLtSymbol,          0,              Button3,        togglefloating, {0} },
 	{ ClkLtSymbol,          0,              Button4,        pushup,         {.i = -1 } },
 	{ ClkLtSymbol,          0,              Button5,      	pushdown,       {.i = +1 } },

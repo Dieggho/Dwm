@@ -1,4 +1,5 @@
 #!/bin/bash
+notify-send "\"alt gr\" key is being held down" "for 3 secs" -t 3000
 xdo key_press -k 92
 sleep 3
 xdo key_release -k 92

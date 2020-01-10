@@ -22,12 +22,16 @@ OPTIONS="\
  Screenshot \n\
  About"
 
-LAUNCHER="		\
-dmenu 			\
--fn 'Sans-8' 		\
--y 19			\
--l 10 			\
--w 150 			\
+LAUNCHER="			\
+rofi                            \
+-dmenu                          \
+-location 1                     \
+-lines 10                       \
+-width 371                      \
+-yoffset 19                     \
+-columns 2                      \
+-me-accept-entry MousePrimary   \
+-me-select-entry MouseDPrimary  \
 "
 
 option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
@@ -38,13 +42,13 @@ then
         eval $1
         ;;
              )
-        xdotool key Super+2; firefox
+        gotag t2; firefox
         ;;
             )
-        xdotool key Super+1; telegram-desktop 
+        gotag t1; telegram-desktop 
         ;;
             )
-        xdotool key Super+1; deadbeef
+        gotag t1; deadbeef
         ;;
             )
         rox
@@ -62,13 +66,13 @@ then
         editor
         ;;
             )
-        xdotool key Super+6; pinta
+        gotag t6; pinta
         ;;
             )
-        xdotool key Super+3; transmission-gtk
+        gotag t3; transmission-gtk
         ;;
              )
-        firefox --private-window; xdotool key Super+2
+        firefox --private-window; gotag t2
         ;;
             )
         st-arc -e alsamixer

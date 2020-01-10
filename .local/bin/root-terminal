@@ -1,6 +1,5 @@
 #!/bin/bash
-sleep 0.1
-xdotool key Super+5
+gotag t5
 st			\
 -n Root-Terminal	\
 -t Root-terminal	\

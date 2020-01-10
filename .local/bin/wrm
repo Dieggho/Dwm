@@ -1,69 +1,48 @@
 #!/bin/bash
 
-# This script needs the following packages to work
+# This script needs "xdo" to work
 # "xorg-xwininfo" and "xdotool"
 # Please install them before trying to run it
 # 
 
+
 # Set distance
 d=20
 
-# Getting windo id
-win=`xdotool getactivewindow`
-
-# Getting Width and Height with Positions Y and X on the screen
-w=`xwininfo -id $win | grep "Width" | awk '{print $2}'`
-h=`xwininfo -id $win | grep "Height" | awk '{print $2}'`
-y=`xwininfo -id $win | grep 'Absolute upper-left Y' | awk '{print $4}'`
-x=`xwininfo -id $win | grep 'Absolute upper-left X' | awk '{print $4}'`
-
+# Set windows id
+id=`xdo id`
 function plus_w(){
-	xdotool windowsize $win \
-	`expr $w + $d` \
-	`expr $h`
+	xdo resize -w +$d
 }
 
 function minus_w(){
-	xdotool windowsize $win \
-	`expr $w - $d` \
-	`expr $h`
+	xdo resize -w -$d
 }
 
 function plus_h(){
-	xdotool windowsize $win \
-	`expr $w` \
-	`expr $h + $d`
+	xdo resize -h +$d
 }
 
 function minus_h(){
-	xdotool windowsize $win \
-	`expr $w` \
-	`expr $h - $d`
+	xdo resize -h -$d
 }
 
 function right(){
-	xdotool windowmove $win \
-	`expr $x + $d` \
-	`expr $y`
+	xdo move -x +$d $id
 }
 
 function left(){
-	xdotool windowmove $win \
-	`expr $x - $d` \
-	`expr $y`
+	xdo move -x -$d $id
 }
 
 function down(){
-	xdotool windowmove $win \
-	`expr $x` \
-	`expr $y + $d`
+	xdo move -y +$d $id
 }
 
 function up(){
-	xdotool windowmove $win \
-	`expr $x` \
-	`expr $y - $d`
+	xdo move -y -$d $id
 }
+
 
 while true
 do
@@ -91,5 +70,4 @@ do
 	fi 
 break
 done
-
-xdotool mousemove `expr $x + 45` `expr $y + 45`
+xdo pointer_motion -x +9999 -y -9999

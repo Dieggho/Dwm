@@ -2,4 +2,5 @@
 st-arc 			\
 -c SmartTerm		\
 -n Smart-Terminal	\
--t Smart-terminal
+-t Smart-terminal	\
+-g 93x30

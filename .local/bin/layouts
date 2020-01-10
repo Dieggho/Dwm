@@ -5,13 +5,18 @@ OPTIONS="\
  Floating \n\
  Monocle"
 
-LAUNCHER="		\
-dmenu 			\
--fn 'Sans-8' 		\
--y 19			\
--l 10 			\
--x 340			\
--w 100 			
+LAUNCHER="                      \
+rofi                            \
+-dmenu                          \
+-location 1                     \
+-lines 3                        \
+-width 10                       \
+-yoffset 19                     \
+-xoffset 335                    \
+-columns 2                      \
+-me-accept-entry MousePrimary   \
+-me-select-entry MouseDPrimary  \
+-p layouts                      \
 "
 
 option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`

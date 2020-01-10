@@ -1,18 +1,23 @@
 #!/bin/bash
 
 OPTIONS="\
- Choose Service \n\
+
  Connman Shell \n\
  Enable Wifi\n\
  Disable Wifi"
 
-LAUNCHER="		\
-dmenu 			\
--fn 'Sans-8' 		\
--y 19			\
--l 15 			\
--w 135 			\
--x 1100			\
+LAUNCHER="                      \
+rofi                            \
+-dmenu                          \
+-location 1                     \
+-lines 3                        \
+-width 13                       \
+-xoffset 1100                   \
+-yoffset 19                     \
+-columns 2                      \
+-me-accept-entry MousePrimary   \
+-me-select-entry MouseDPrimary  \
+-p Network                      \
 "
 
 option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
@@ -21,9 +26,6 @@ then
     case $option in
       Exit)
         eval $1
-        ;;
-             )
-        sleep 0.5; notify-send --icon=network-wireless 'Network Manager' 'Scanning..'; sudo connman_dmenu
         ;;
             )
         st-arc -e connmanctl

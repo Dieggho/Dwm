@@ -2,16 +2,21 @@
 
 OPTIONS="\
  Logoff\n\
-  Suspend system\n\
- Reboot system\n\
- Power-off system"
+ Lock screen\n\
+ Reboot\n\
+ Power-off"
 
-LAUNCHER="		\
-dmenu 			\
--fn 'Sans-8' 		\
--y 19			\
--l 10 			\
--w 150 			\
+LAUNCHER="                      \
+rofi                            \
+-dmenu                          \
+-location 1                     \
+-lines 4                        \
+-width 13                       \
+-yoffset 19                     \
+-columns 2                      \
+-me-accept-entry MousePrimary   \
+-me-select-entry MouseDPrimary  \
+-p Session                      \
 "
 
 option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
@@ -25,7 +30,8 @@ then
         pkill dwm
         ;;
             )
-        slock systemctl suspend -i
+	sleep 0.1
+        slock `xset dpms force off`
         ;;
             )
         systemctl reboot

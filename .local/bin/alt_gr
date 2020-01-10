@@ -1,0 +1,4 @@
+#!/bin/bash
+xdo key_press -k 92
+sleep 3
+xdo key_release -k 92

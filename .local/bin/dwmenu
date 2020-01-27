@@ -6,32 +6,37 @@ OPTIONS="\
  Deadbeef \n\
  RoxFiler \n\
  Terminal \n\
- Smart-Term \n\
+ Smart-Term \n\
  Root-Terminal \n\
  Leafpad \n\
  Pinta \n\
  Transmission \n\
  Private Browser\n\
- Alsamixer \n\
+ Tor Browser \n\
+ Pulsemixer \n\
  Wallpaper \n\
  Connman \n\
- Python \n\
+ Python \n\
  Lxtask \n\
  Arandr \n\
  Record Desktop \n\
  Screenshot \n\
+ Retroarch \n\
+ Dosbox \n\
+ Virtualbox \n\
  About"
 
 LAUNCHER="			\
 rofi                            \
 -dmenu                          \
 -location 1                     \
--lines 10                       \
+-lines 12                       \
 -width 371                      \
 -yoffset 19                     \
 -columns 2                      \
 -me-accept-entry MousePrimary   \
 -me-select-entry MouseDPrimary  \
+-p Menu				\
 "
 
 option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
@@ -56,7 +61,7 @@ then
             )
         terminal
         ;;
-            )
+            )
         smart-terminal
         ;;
             )
@@ -72,10 +77,13 @@ then
         gotag t3; transmission-gtk
         ;;
              )
-        firefox --private-window; gotag t2
+        gotag t2; firefox --private-window
+        ;;
+             )
+        gotag t3; /home/void/Packages/tor-browser_en-US/Browser/start-tor-browser
         ;;
             )
-        st-arc -e alsamixer
+        st-arc -e pulsemixer
         ;;
             )
         wallpaper
@@ -83,7 +91,7 @@ then
             )
         st-arc -e connmanctl
         ;;
-            )
+            )
         python-shell
         ;;
             )
@@ -97,6 +105,15 @@ then
         ;;
             )
         sleep 0.5; screenshot
+        ;;
+            )
+        gotag t6; retroarch
+        ;;
+            )
+        gotag t6; dosbox
+        ;;
+            )
+        gotag t6; virtualbox
         ;;
             )
         sysinfo

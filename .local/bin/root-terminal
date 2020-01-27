@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 0.1
 gotag t5
 st			\
 -n Root-Terminal	\

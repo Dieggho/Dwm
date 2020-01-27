@@ -58,6 +58,9 @@ static const Rule rules[] = {
 	{ "ffplay",  			NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "VirtualBox Manager",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "VirtualBox Machine",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "VirtualBox", 		NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "qemu-system-x86_64",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "Qemu-system-x86_64",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "mednafen",  			NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "feh",  			NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "Sxiv",                       NULL,       NULL,       1 << 5,       1,             1,           -1 },
@@ -70,6 +73,7 @@ static const Rule rules[] = {
 	{ "Pavucontrol",	        NULL,       NULL,       0 << 0,       1,             1,           -1 },
         { "SmartTerm",                  NULL,       NULL,       0 << 0,       1,             1,           -1 },
         { "ROX-Filer",                  NULL,       NULL,       0 << 0,       1,             0,           -1 },
+        { "dosbox",                     NULL,       NULL,       1 << 5,       0,             0,           -1 },
 };
 
 /* layout(s) */
@@ -104,7 +108,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0";               /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] =              { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] =              { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-p", "run", NULL };
 static const char *termcmd[] =               { "terminal", NULL }; /* change me to any terminal you want */
 static const char *ffox[]  =                 { "firefox", NULL };
 static const char *file[]  =                 { "rox", NULL };
@@ -114,11 +118,10 @@ static const char *morc[] =                  { "dwmenu", NULL };
 static const char *sessmgr[] =               { "session-manager", NULL }; 
 static const char *nwmgr[] =                 { "nwmgr", NULL };
 static const char *connman[] =               { "st-arc", "-t", "Connman", "-e", "connmanctl", NULL };
-//static const char *vup[] =                   { "pactl", "set-sink-volume", "0", "+5%", NULL }; /* use it with Pulseaudio */
-//static const char *vdown[] =                 { "pactl", "set-sink-volume", "0", "-5%", NULL }; /* use it with Pulseaudio */
-static const char *vup[]   =                 { "amixer", "set", "Master", "3+",     NULL }; /* use it with Alsa-Utils */
-static const char *vdown[] =                 { "amixer", "set", "Master", "3-",     NULL }; /* use it with Alsa-Utils */
-static const char *gcal[] =                  { "gsimplecal", NULL };
+static const char *vup[] =                   { "pactl", "set-sink-volume", "0", "+5%", NULL }; /* use it with Pulseaudio */
+static const char *vdown[] =                 { "pactl", "set-sink-volume", "0", "-5%", NULL }; /* use it with Pulseaudio */
+//static const char *vup[]   =                 { "amixer", "set", "Master", "3+",     NULL }; /* use it with Alsa-Utils */
+//static const char *vdown[] =                 { "amixer", "set", "Master", "3-",     NULL }; /* use it with Alsa-Utils */
 static const char *scrsht[] =                { "screenshot", NULL };
 static const char *smart[] =                 { "smart-terminal", NULL }; /* if you set a terminal with a class "SmartTerm" dwm with treat as a foating window */
 static const char *leafpad[] =               { "leafpad", NULL };
@@ -126,7 +129,7 @@ static const char *wpaper[] =                { "wallpaper", NULL };
 static const char *susp[] =                  { "slock", "systemctl", "suspend", "-i", NULL };
 static const char *reboot[] =                { "systemctl", "reboot", NULL };
 static const char *python[] =                { "python-shell", NULL };
-static const char *aft[] =                   { "simple-mtpfs", "~/mtpAndroid/", "-o", "allow_other", NULL };
+static const char *mtp[] =                   { "mtp", NULL };
 static const char *task[] =                  { "lxtask", NULL };
 static const char *plus_w[] =                { "wrm", "plus_w", NULL };
 static const char *minus_w[] =               { "wrm", "minus_w", NULL };
@@ -140,9 +143,11 @@ static const char *next[] =                  { "tag", "next", NULL };
 static const char *prev[] =                  { "tag", "prev", NULL };
 static const char *rooterm[] =               { "root-terminal", NULL };
 static const char *alt_gr[]  =               { "alt_gr", NULL };
+static const char *lock[]  =                 { "lock", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ 0,                            XK_Pause,  spawn,          {.v = lock } },
         { 0,                            XK_Print,  spawn,          {.v = scrsht } },
         { Mod5Mask,                     XK_Delete, spawn,          {.v = task } },
         { Mod5Mask,                     XK_l,      spawn,          {.v = leafpad } },
@@ -152,14 +157,14 @@ static Key keys[] = {
 	{ Mod5Mask|ShiftMask,           XK_p,      spawn,          {.v = python } },
 	{ Mod5Mask,                     XK_Return, spawn,          {.v = termcmd } },
         { Mod5Mask, 		        XK_f,      spawn,          {.v = ffox } },
-	{ Mod5Mask,                     XK_a,      spawn,          {.v = aft } },
+	{ Mod5Mask,                     XK_a,      spawn,          {.v = mtp } },
 	{ Mod5Mask,                     XK_r,      spawn,          {.v = file } },
 	{ Mod5Mask,                     XK_d,      spawn,      	   {.v = deadbeef } },
         { Mod5Mask,                     XK_t,      spawn,          {.v = telegram} },
         { Mod5Mask,                     XK_n,      spawn,          {.v = connman} },
         { Mod5Mask,                     XK_F9,     spawn,          {.v = susp} },
         { Mod5Mask,                     XK_F5,     spawn,          {.v = reboot} },
-	{ Mod5Mask,             	XK_w,      spawn,          {.v = wpaper } },
+	{ Mod1Mask,             	XK_w,      spawn,          {.v = wpaper } },
 	{ Mod5Mask,                     XK_Up,     spawn,          {.v = up } },
 	{ Mod5Mask,                     XK_Down,   spawn,          {.v = down } },
 	{ Mod5Mask,                     XK_Left,   spawn,          {.v = left } },
@@ -212,14 +217,13 @@ static Key keys[] = {
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
         { ClkButton,		0,		Button1,	spawn,		{.v = morc } },
-	{ ClkButton,            0,              Button2,        spawn,          {.v = file } },
+	{ ClkButton,            0,              Button2,        spawn,          {.v = alt_gr } },
         { ClkButton,            0,              Button3,        spawn,          {.v = sessmgr } },
         { ClkButton,            0,              Button4,        incnmaster,     {.i = +1 } },
         { ClkButton,            0,              Button5,        incnmaster,     {.i = -1 } },
-        { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+        { ClkLtSymbol,          0,              Button1,        setlayout,      {.v = &layouts[0]} },
 	{ ClkLtSymbol,          0,              Button2,        setlayout,      {.v = &layouts[2]} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[1]} },
-	{ ClkLtSymbol,          0,              Button3,        togglefloating, {0} },
 	{ ClkLtSymbol,          0,              Button4,        pushup,         {.i = -1 } },
 	{ ClkLtSymbol,          0,              Button5,      	pushdown,       {.i = +1 } },
 	{ ClkWinTitle,          0,              Button4,        focusstack,     {.i = -1 } },
@@ -228,7 +232,7 @@ static Button buttons[] = {
 	{ ClkWinTitle,          0,              Button1,	movemouse,      {0} },
         { ClkWinTitle,          0,              Button3,        resizemouse,    {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-        { ClkStatusText,        0,              Button1,        spawn,          {.v = gcal } },
+        { ClkStatusText,        0,              Button1,        spawn,          {.v = nwmgr } },
         { ClkStatusText,        0,              Button3,        spawn,          {.v = nwmgr } },
 	{ ClkStatusText,        0,              Button4,        spawn,          {.v = vup } },
 	{ ClkStatusText,        0,              Button5,        spawn,          {.v = vdown } },

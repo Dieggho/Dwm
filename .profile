@@ -39,16 +39,19 @@ unset TERMCAP
 # Man is much better than us at figuring this out
 unset MANPATH
 
+export EDITOR=nano
 export LANG=en_US.UTF-8
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_PLATFORMTHEME=qt5ct
 export QT_PLATFORM_PLUGIN=qt5ct
 
+
 export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/.sh
+
 
 /home/$USER/.fehbg &
-xset -dpms s off &
-slstatus &
 xcompmgr &
 devmon &
-#xbindkeys &
+qjoypad &
+slstatus &

@@ -1,2 +1,2 @@
 #! /bin/sh
-exec ffplay -loop 999 "$@" & xdotool key Super+6
+exec ffplay -loop 999 "$@" & gotag t6

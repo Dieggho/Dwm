@@ -1,2 +1,2 @@
 #! /bin/sh
-exec transmission-gtk "$@" & xdotool key Super+3
+exec transmission-gtk "$@" & gotag t3

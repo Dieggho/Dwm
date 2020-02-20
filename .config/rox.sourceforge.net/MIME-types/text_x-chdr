@@ -1,2 +1,2 @@
 #! /bin/sh
-exec leafpad "$@" & xdotool key Super+4
+exec leafpad "$@" & gotag t4

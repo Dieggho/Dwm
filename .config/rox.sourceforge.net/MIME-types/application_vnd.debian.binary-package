@@ -1,2 +1,2 @@
 #! /bin/sh
-exec ar x "$@"
+exec 7z x "$@"

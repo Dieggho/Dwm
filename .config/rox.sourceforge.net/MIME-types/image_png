@@ -1,2 +1,2 @@
 #! /bin/sh
-exec sxiv "$@" & xdotool key Super+6
+exec sxiv "$@" & gotag t6

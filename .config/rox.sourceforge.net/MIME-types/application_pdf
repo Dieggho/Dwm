@@ -1,2 +1,2 @@
 #! /bin/sh
-exec epdfview "$@" & xdotool key Super+4
+exec epdfview "$@" & gotag t4

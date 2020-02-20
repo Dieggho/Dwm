@@ -1,2 +1,2 @@
 #! /bin/sh
-exec firefox "$@" & xdotool key Super+4
+exec firefox "$@" & gotag t4

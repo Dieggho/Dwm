@@ -1,2 +1,0 @@
-#!/bin/bash
-echo `ip a | grep wlp2s0 | grep inet | awk '{print $2}'| cut -d/ -f1`

@@ -1,9 +1,0 @@
-#!/bin/bash
-
-while true
-do
-	vol=`awk -F"[][]" '/dB/ { print $2 }' <(amixer sget Master)`
-	time=`date "+%H:%M:%S %a %d/%m/%y"`
-
-	echo `nwspd wlp2s0` `cpu` `mem` `bat` `net`  $vol   $time
-done

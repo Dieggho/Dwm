@@ -1,4 +1,0 @@
-#!/bin/bash
-sleep 0.1
-xdotool key Super+4
-leafpad

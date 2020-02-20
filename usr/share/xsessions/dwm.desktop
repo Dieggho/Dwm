@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=dwm
+Comment=Suckless DWM Session
+Exec=/usr/local/bin/dwm
+TryExec=/usr/local/bin/dwm
+Icon=dwm
+Type=Application

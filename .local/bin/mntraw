@@ -1,2 +1,0 @@
-#!/bin/bash
-sudo mount -o loop,offset=32256 $1 $2

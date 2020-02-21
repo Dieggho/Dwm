@@ -22,15 +22,13 @@ OPTIONS="\
  Record Desktop \n\
  Screenshot \n\
  Retroarch \n\
- Dosbox \n\
- Virtualbox \n\
- About"
+ Virtualbox"
 
 LAUNCHER="			\
 rofi                            \
 -dmenu                          \
 -location 1                     \
--lines 12                       \
+-lines 11                       \
 -width 371                      \
 -yoffset 19                     \
 -columns 2                      \
@@ -109,14 +107,8 @@ then
             )
         gotag t6; retroarch
         ;;
-            )
-        gotag t6; dosbox
-        ;;
             )
         gotag t6; virtualbox
-        ;;
-            )
-        sysinfo
         ;;
       *)
         ;;

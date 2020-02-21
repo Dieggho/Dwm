@@ -1,7 +1,4 @@
 #!/bin/bash
-# This script needs "xdo" to work
-# Please install them before trying to run it
-# 
 
 case $1 in
 	1)

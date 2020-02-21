@@ -1,6 +1,5 @@
 #!/bin/bash
 # The script must be used on DWM with the "ewmhtags" patch applied
-# it also requires "xdo" installed
 # it's a workaround for the case you can't apply the patch "nextprev"  
 #
 

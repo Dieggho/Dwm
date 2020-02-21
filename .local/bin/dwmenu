@@ -99,7 +99,7 @@ then
         arandr
         ;;
             )
-        st-arc -e recdesk
+        gotag 7; simplescreenrecorder
         ;;
             )
         sleep 0.5; screenshot

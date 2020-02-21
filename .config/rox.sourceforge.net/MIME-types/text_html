@@ -1,2 +1,2 @@
 #! /bin/sh
-exec firefox "$@" & gotag t4
+exec firefox "$@" & gotag 4

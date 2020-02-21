@@ -1,2 +1,2 @@
 #! /bin/sh
-exec epdfview "$@" & gotag t4
+exec epdfview "$@" & gotag 4

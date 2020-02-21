@@ -1,10 +1,7 @@
 #!/bin/bash
-
 # This script needs "xdo" to work
-# "xorg-xwininfo" and "xdotool"
 # Please install them before trying to run it
 # 
-
 
 # Set distance
 d=20
@@ -13,66 +10,26 @@ d=20
 id=`xdo id`
 
 
-plus_w(){
-	xdo resize -w +$d
-}
+case $1 in
+	+w)
+		xdo resize -w +$d;;
+	-w)
+		xdo resize -w -$d;;
+	+h)
+		xdo resize -h +$d;;
+	-h)
+		xdo resize -h -$d;;
+	up)
+		xdo move -y -$d $id
+	        xdo pointer_motion -x 0 -y -$d;;
+	down)
+		xdo move -y +$d $id
+		xdo pointer_motion -x 0 -y +$d;;
+	left)
+		xdo move -x -$d $id
+		xdo pointer_motion -x -$d -y 0;;
+	right)
+		xdo move -x +$d $id
+		xdo pointer_motion -x +$d -y 0;;
+esac
 
-minus_w(){
-	xdo resize -w -$d
-}
-
-plus_h(){
-	xdo resize -h +$d
-}
-
-minus_h(){
-	xdo resize -h -$d
-}
-
-right(){
-	xdo move -x +$d $id
-	xdo pointer_motion -x +$d -y 0
-}
-
-left(){
-	xdo move -x -$d $id
-	xdo pointer_motion -x -$d -y 0
-}
-
-down(){
-	xdo move -y +$d $id
-	xdo pointer_motion -x 0 -y +$d
-}
-
-up(){
-	xdo move -y -$d $id
-	xdo pointer_motion -x 0 -y -$d
-}
-
-
-while true
-do
-	if [ -z "$1" ] || [ $1 != "plus_w" -a $1 != "minus_w" -a $1 != "plus_h" -a $1 != "minus_h" -a $1 != "right" -a $1 != "left" -a $1 != "down" -a $1 != "up" -a $1 != "-h" ]
-	then
-		echo "This script needs arguments"
-		echo "wrm -h will show them"
-		break
-
-	elif [ $1 == "-h" ]
-	then
-		echo "usage: wrm [argument]"
-		echo "arguments:"
-		echo "plus_w		increases widht"
-		echo "plus_h		increases height"
-		echo "minus_w		decreases widht"
-		echo "minus_h		decreases height"
-		echo "right		moves right"
-		echo "left		moves left"
-		echo "up		moves up"
-		echo "down		moves down"
-
-	else
-		$1
-	fi 
-break
-done

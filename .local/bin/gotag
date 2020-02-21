@@ -1,57 +1,49 @@
 #!/bin/bash
+# This script needs "xdo" to work
+# Please install them before trying to run it
+# 
 
-t1(){
-	xdo key_press -k 133
-	xdo key_press -k 10 
-	xdo key_release -k 133 
-	xdo key_release -k 10
-}
-
-t2(){
- 	xdo key_press -k 133
-	xdo key_press -k 11
-	xdo key_release -k 133
-	xdo key_release -k 11
-}
-
-t3(){
-	xdo key_press -k 133
-	xdo key_press -k 12
-	xdo key_release -k 133
-	xdo key_release -k 12
-}
-
-t4(){
-	xdo key_press -k 133
-	xdo key_press -k 13
-	xdo key_release -k 133
-	xdo key_release -k 13
-}
-
-t5(){
-	xdo key_press -k 133
-	xdo key_press -k 14
-	xdo key_release -k 133
-	xdo key_release -k 14
-}
-
-t6(){
-	xdo key_press -k 133
-	xdo key_press -k 15
-	xdo key_release -k 133
-	xdo key_release -k 15
-}
-
-t7(){
-	xdo key_press -k 133
-	xdo key_press -k 16
-	xdo key_release -k 133
-	xdo key_release -k 16
-}
-
-if [ -z "$1" ] || [ $1 != "t1" -a $1 != "t2" -a $1 != "t3" -a $1 != "t4" -a $1 != "t5" -a $1 != "t6" -a $1 != "t7" ]
-then
-	echo "This script change tags via command line with xdo, it accepts as argment from t1 to t7" 
-else
-	$1
-fi
+case $1 in
+	t1)
+		xdo key_press -k 133
+		xdo key_press -k 10 
+		xdo key_release -k 133 
+		xdo key_release -k 10
+		;;
+	t2)
+	 	xdo key_press -k 133
+		xdo key_press -k 11
+		xdo key_release -k 133
+		xdo key_release -k 11
+		;;
+	t3)
+		xdo key_press -k 133
+		xdo key_press -k 12
+		xdo key_release -k 133
+		xdo key_release -k 12
+		;;
+	t4)
+		xdo key_press -k 133
+		xdo key_press -k 13
+		xdo key_release -k 133
+		xdo key_release -k 13
+		;;
+	t5)
+		xdo key_press -k 133
+		xdo key_press -k 14
+		xdo key_release -k 133
+		xdo key_release -k 14
+		;;
+	t6)
+		xdo key_press -k 133
+		xdo key_press -k 14
+		xdo key_release -k 133
+		xdo key_release -k 14
+		;;	
+	t1)
+		xdo key_press -k 133
+		xdo key_press -k 16
+		xdo key_release -k 133
+		xdo key_release -k 16
+		;;
+esac

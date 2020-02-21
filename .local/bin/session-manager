@@ -30,8 +30,7 @@ then
         pkill dwm
         ;;
             )
-	sleep 0.1
-        slock `xset dpms force off`
+	lock
         ;;
             )
         systemctl reboot

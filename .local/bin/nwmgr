@@ -12,7 +12,7 @@ rofi                            \
 -location 1                     \
 -lines 3                        \
 -width 13                       \
--xoffset 1100                   \
+-xoffset 1050                   \
 -yoffset 19                     \
 -columns 2                      \
 -me-accept-entry MousePrimary   \

@@ -36,7 +36,7 @@ case $1 in
 		;;
 	6)
 		xdo key_press -k 133
-		xdo key_press -k 14
+		xdo key_press -k 15
 		xdo key_release -k 133
 		xdo key_release -k 15
 		;;	

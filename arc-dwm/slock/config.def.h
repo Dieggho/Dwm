@@ -3,7 +3,7 @@ static const char *user  = "nobody";
 static const char *group = "nobody";
 
 static const char *colorname[NUMCOLS] = {
-	[INIT] =   "#383C4A",     /* after initialization */
+	[INIT] =   "#000000",   /* after initialization */
 	[INPUT] =  "#2D5D96",   /* during input */
 	[FAILED] = "#CC3333",   /* wrong password */
 };
@@ -12,7 +12,7 @@ static const char *colorname[NUMCOLS] = {
 static const int failonclear = 1;
 
 /* default message */
-static const char * message = "Suckless: Software that sucks less.";
+static const char * message = "There is no knowledge that is not power";
 
 /* text color */
 static const char * text_color = "#ffffff";

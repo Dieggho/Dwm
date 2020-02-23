@@ -1,7 +1,0 @@
-#!/bin/bash
-cd $( dirname "$@")
-st-arc 			\
--c SmartTerm		\
--n Smart-Terminal	\
--t Descompact		\
--e xarch "$@"; sleep 3

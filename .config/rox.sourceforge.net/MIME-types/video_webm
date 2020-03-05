@@ -1,2 +1,2 @@
 #! /bin/sh
-exec ffplay -loop 999 "$@" & gotag 6
+exec ffplay -loop 999 "$@" & chtag 6

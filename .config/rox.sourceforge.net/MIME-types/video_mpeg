@@ -1,2 +1,2 @@
 #! /bin/sh
-exec ffplay "$@" & gotag 6
+exec ffplay "$@" & chtag 6

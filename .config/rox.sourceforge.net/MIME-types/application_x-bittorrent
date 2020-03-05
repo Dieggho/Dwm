@@ -1,2 +1,2 @@
 #! /bin/sh
-exec transmission-gtk "$@" & gotag 3
+exec transmission-gtk "$@" & chtag 3

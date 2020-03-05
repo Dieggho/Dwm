@@ -1,2 +1,2 @@
 #! /bin/sh
-exec leafpad "$@" & gotag 4
+exec leafpad "$@" & chtag 4

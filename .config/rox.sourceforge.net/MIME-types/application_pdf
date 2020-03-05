@@ -1,2 +1,2 @@
 #! /bin/sh
-exec epdfview "$@" & gotag 4
+exec firefox "$@" & chtag 2

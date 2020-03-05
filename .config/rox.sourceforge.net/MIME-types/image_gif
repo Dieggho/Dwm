@@ -1,2 +1,2 @@
 #! /bin/sh
-exec sxiv -a "$@" & gotag 6
+exec sxiv -a "$@" & chtag 6

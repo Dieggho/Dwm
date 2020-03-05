@@ -1,0 +1,45 @@
+#!/bin/bash
+case $1 in
+	1)
+		xdo key_press -k 133
+		xdo key_press -k 10 
+		xdo key_release -k 133 
+		xdo key_release -k 10
+		;;
+	2)
+	 	xdo key_press -k 133
+		xdo key_press -k 11
+		xdo key_release -k 133
+		xdo key_release -k 11
+		;;
+	3)
+		xdo key_press -k 133
+		xdo key_press -k 12
+		xdo key_release -k 133
+		xdo key_release -k 12
+		;;
+	4)
+		xdo key_press -k 133
+		xdo key_press -k 13
+		xdo key_release -k 133
+		xdo key_release -k 13
+		;;
+	5)
+		xdo key_press -k 133
+		xdo key_press -k 14
+		xdo key_release -k 133
+		xdo key_release -k 14
+		;;
+	6)
+		xdo key_press -k 133
+		xdo key_press -k 15
+		xdo key_release -k 133
+		xdo key_release -k 15
+		;;	
+	7)
+		xdo key_press -k 133
+		xdo key_press -k 16
+		xdo key_release -k 133
+		xdo key_release -k 16
+		;;
+esac

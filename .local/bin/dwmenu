@@ -45,13 +45,13 @@ then
         eval $1
         ;;
              )
-        gotag t2; firefox
+        chtag 2; firefox
         ;;
             )
-        gotag t1; telegram-desktop 
+        chtag 1; telegram-desktop 
         ;;
             )
-        gotag t1; deadbeef
+        chtag 1; deadbeef
         ;;
             )
         rox
@@ -66,19 +66,19 @@ then
         root-terminal
         ;;
             )
-        editor
+        chtag 4 ; leafpad
         ;;
             )
-        gotag t6; pinta
+        chtag 6; pinta
         ;;
             )
-        gotag t3; transmission-gtk
+        chtag 3; transmission-gtk
         ;;
              )
-        gotag t2; firefox --private-window
+        chtag 2; firefox --private-window
         ;;
              )
-        gotag t3; /home/void/Packages/tor-browser_en-US/Browser/start-tor-browser
+        chtag 3; /home/void/Packages/tor-browser_en-US/Browser/start-tor-browser
         ;;
             )
         st-arc -e pulsemixer
@@ -99,16 +99,16 @@ then
         arandr
         ;;
             )
-        gotag 7; simplescreenrecorder
+        chtag 7; simplescreenrecorder
         ;;
             )
         sleep 0.5; screenshot
         ;;
             )
-        gotag t6; retroarch
+        chtag t6; retroarch
         ;;
             )
-        gotag t6; virtualbox
+        chtag t6; virtualbox
         ;;
       *)
         ;;

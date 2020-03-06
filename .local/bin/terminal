@@ -1,6 +1,6 @@
 #!/bin/bash
 sleep 0.1
-gotag 5
+chtag 5
 st-arc \
 -c Terminal \
 -n Terminal \

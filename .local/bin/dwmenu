@@ -24,8 +24,7 @@ OPTIONS="\
  Retroarch \n\
  Virtualbox"
 
-LAUNCHER="			\
-rofi                            \
+LAUNCHER="rofi                  \
 -dmenu                          \
 -location 1                     \
 -lines 11                       \
@@ -84,7 +83,7 @@ then
         st-arc -e pulsemixer
         ;;
             )
-        wallpaper
+        chtag 6; wallpaper
         ;;
             )
         st-arc -e connmanctl
@@ -105,10 +104,10 @@ then
         sleep 0.5; screenshot
         ;;
             )
-        chtag t6; retroarch
+        chtag 6; retroarch
         ;;
             )
-        chtag t6; virtualbox
+        chtag 6; virtualbox
         ;;
       *)
         ;;

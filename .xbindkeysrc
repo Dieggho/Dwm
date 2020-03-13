@@ -8,7 +8,7 @@
 "terminal"
 	Mod5 + Return
 
-"xdotool windowkill `xdotool getactivewindow`"
+"xdo kill"
         Mod5 + k
 
 "smart-terminal"
@@ -19,15 +19,6 @@
 
 "screenshot"
 	Print
-
-"amixer set Master 3-"
-	XF86AudioLowerVolume
-
-"amixer set Master 3+"
-	XF86AudioRaiseVolume
-
-"amixer sset Master toggle"
-	XF86AudioMute
 
 "firefox"
 	Mod5 + f
@@ -48,7 +39,7 @@
 	Mod5 + Shift + p
 
 "wallpaper"
-	Mod5 + w
+	Mod5 + b
 
 "session-manager"
 	Mod5 + s
@@ -59,8 +50,14 @@
 "lxtask"
 	Mod5 + m
 
-"editor"
+"leafpad"
 	Mod5 + l
+
+"lock"
+	XF86Launch1
+
+"dwmenu"
+	Menu
 
 ##################################
 #     Window resize and move     #
@@ -78,16 +75,16 @@
 "wrm right"
 	Mod5 + Right
 
-"wrm minus_h"
+"wrm -h"
 	Mod5 + Shift +  Up
 
-"wrm plus_h"
+"wrm +h"
 	Mod5 + Shift +  Down
 
-"wrm minus_w"
+"wrm -w"
 	Mod5 + Shift +  Left
 
-"wrm plus_w"
+"wrm +w"
 	Mod5 + Shift +  Right
 
 ##################################

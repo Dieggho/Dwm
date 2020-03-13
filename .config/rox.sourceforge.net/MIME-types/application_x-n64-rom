@@ -1,2 +1,2 @@
 #! /bin/sh
-exec mupen64plus "$@"
+exec mupen64plus "$@" & chteg 6

@@ -1,0 +1,31 @@
+sudo pacman -S \
+arc-gtk-theme \
+arc-icon-theme \
+arandr \
+awesome-terminal-fonts \
+connman \
+deadbeef \
+feh \
+firefox \
+fuse2 \
+leafpad \ 
+libmtp \
+lxdm \
+lxtask \
+p7zip \
+pacman-contrib \
+pacmatic \
+pinta \
+pulsemixer \
+qt5-styleplugins \
+qt5ct \
+rofi \
+rox \
+shotgun \ 
+simplescreenrecorder \
+transmission-gtk \
+udevil \
+xbindkeys \
+xcompmgr \
+xdo \
+xf86-video-intel

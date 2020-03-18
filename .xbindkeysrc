@@ -2,11 +2,14 @@
 # xbindkeys configuration #
 ###########################
 
-"xbindkeys --poll-rc; notify-send 'Xbindkey reloaded'"
+"pkill xbindkeys; xbindkeys;notify-send 'Xbindkey reloaded'"
 	Mod5 + BackSpace
 
 "terminal"
 	Mod5 + Return
+
+"root-terminal"
+	Mod5 + Shift + Return
 
 "xdo kill"
         Mod5 + k

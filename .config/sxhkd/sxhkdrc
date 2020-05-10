@@ -1,0 +1,50 @@
+################################################################################################################
+# wm independent hotkeys
+#
+
+Pause
+	slock systemctl suspend
+
+Print
+	screenshot
+
+mod5 + ctrl + Delete
+	reboot
+
+# terminal emulator
+mod5 + {_,shift + } Return
+	{terminal,root-terminal}
+
+ctrl + alt + {t,p}
+	{smart-terminal,python-shell}
+
+# program launcher
+mod5 + {_,shift + } p
+	{dmenu_run -fn 'Sans-8' -nb '#2B2E37' -nf '#d8d8d8' -sb '#5294E2' -sf '#d8d8d8' -p run,python-shell}
+
+# make sxhkd reload its configuration files:
+mod5 + BackSpace
+	pkill -USR1 -x sxhkd; notify-send "sxhkd reloaded"
+
+# Applications
+mod5 + {f,t,r,d,l,a,s,n,Delete,period,b,KP_Divide}
+	{firefox,telegram-desktop,rox,deadbeef,leafpad,mtp,st-arc -e pulsemixer,st-arc -e connmanctl,lxtask,rox,wallpaper,smart-terminal}
+
+# Volume
+mod5 + {F12,F11,F10}
+	{pactl set-sink-volume 0 +5%,pactl set-sink-volume 0 -5%,pactl set-sink-mute 0 toggle}
+
+# Close window
+mod5 + k
+	xdo kill
+
+~Menu
+	rofi -show-icons -width 450 -show drun
+
+###########################################################################################
+
+mod5 + {Up,Down,Left,Right}
+	wrm {up,down,left,right}
+
+mod5 + shift + {Up,Down,Left,Right}
+	wrm {-h,+h,-w,+w}

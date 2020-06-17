@@ -21,14 +21,15 @@ OPTIONS="\
  Arandr \n\
  Record Desktop \n\
  Screenshot \n\
- Retroarch \n\
- Virtualbox"
+ PlayOnLinux \n\
+ RetroArch
+"
 
 LAUNCHER="rofi                  \
 -dmenu                          \
 -location 1                     \
 -lines 11                       \
--width 371                      \
+-width 337                      \
 -yoffset 19                     \
 -columns 2                      \
 -me-accept-entry MousePrimary   \
@@ -68,7 +69,7 @@ then
         chtag 4 ; leafpad
         ;;
             )
-        chtag 6; pinta
+        chtag 6; flatpak --filesystem=home run com.github.PintaProject.Pinta
         ;;
             )
         chtag 3; transmission-gtk
@@ -77,7 +78,7 @@ then
         chtag 2; firefox --private-window
         ;;
              )
-        chtag 3; /home/void/Packages/tor-browser_en-US/Browser/start-tor-browser
+        chtag 3; /home/void/Documents/tor-browser_en-US/Browser/start-tor-browser
         ;;
             )
         st-arc -e pulsemixer
@@ -103,11 +104,11 @@ then
             )
         sleep 0.5; screenshot
         ;;
-            )
-        chtag 6; retroarch
+            )
+        chtag 7; flatpak run org.phoenicis.playonlinux
         ;;
-            )
-        chtag 6; virtualbox
+            )
+        chtag 6; flatpak --filesystem=home run org.libretro.RetroArch
         ;;
       *)
         ;;

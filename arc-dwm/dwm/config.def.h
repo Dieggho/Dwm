@@ -41,6 +41,8 @@ static const Rule rules[] = {
 	/* class      			instance    title       tags mask     iscentered     isfloating   monitor */
 	{ "Pinta",     			NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "firefox",  			NULL,       NULL,       1 << 1,       1,             0,           -1 },
+	{ "Firefox",  			NULL,       NULL,       1 << 1,       1,             0,           -1 },
+	{ "Navigator", 			NULL,       NULL,       1 << 1,       1,             0,           -1 },
 	{ "Google-chrome",		NULL,       NULL,       1 << 1,       1,             0,           -1 },
         { "mupen64plus",                NULL,       NULL,       1 << 5,       1,             0,           -1 },
         { "retroarch",                  NULL,       NULL,       1 << 5,       1,             0,           -1 },
@@ -52,12 +54,18 @@ static const Rule rules[] = {
 	{ "Telegram",  			NULL,       NULL,       1 << 0,       1,             0,           -1 },
 	{ "deadbeef",  			NULL,       NULL,       1 << 0,       1,             0,           -1 },
 	{ "Tor Browser",                NULL,       NULL,       1 << 2,       1,             0,           -1 },
+	{ "discord",                    NULL,       NULL,       1 << 2,       1,             0,           -1 },
         { "Transmission",               NULL,       NULL,       1 << 2,       1,             0,           -1 },
 	{ "Leafpad",  			NULL,       NULL,       1 << 3,       1,             0,           -1 },
 	{ "Epdfview",  			NULL,       NULL,       1 << 3,       1,             0,           -1 },
 	{ "ffplay",  			NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "Flowblade", 			NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "Gimp-2.10", 			NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "gimp-2.10", 			NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "TuxGuitar", 			NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "VirtualBox Manager",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "VirtualBox Machine",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
+	{ "Steam",       		NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "VirtualBox", 		NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "qemu-system-x86_64",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
 	{ "Qemu-system-x86_64",		NULL,       NULL,       1 << 5,       1,             0,           -1 },
@@ -117,16 +125,17 @@ static const char *vup[] =                   { "pactl", "set-sink-volume", "0", 
 static const char *vdown[] =                 { "pactl", "set-sink-volume", "0", "-5%", NULL }; /* use it with Pulseaudio */
 //static const char *vup[]   =                 { "amixer", "set", "Master", "3+",     NULL }; /* use it with Alsa-Utils */
 //static const char *vdown[] =                 { "amixer", "set", "Master", "3-",     NULL }; /* use it with Alsa-Utils */
-static const char *plus_w[] =                { "wrm", "plus_w", NULL };
-static const char *minus_w[] =               { "wrm", "minus_w", NULL };
-static const char *plus_h[] =                { "wrm", "plus_h", NULL };
-static const char *minus_h[] =               { "wrm", "minus_h", NULL };
+static const char *plus_w[] =                { "wrm", "+w", NULL };
+static const char *minus_w[] =               { "wrm", "-w", NULL };
+static const char *plus_h[] =                { "wrm", "+h", NULL };
+static const char *minus_h[] =               { "wrm", "-h", NULL };
 static const char *up[] =                    { "wrm", "up", NULL };
 static const char *down[] =                  { "wrm", "down", NULL };
 static const char *left[] =                  { "wrm", "left", NULL };
 static const char *right[] =                 { "wrm", "right", NULL };
 static const char *next[] =                  { "tag", "next", NULL };
 static const char *prev[] =                  { "tag", "prev", NULL };
+static const char *alt_gr[] =                { "alt_gr", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -182,6 +191,7 @@ static Key keys[] = {
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
         { ClkButton,		0,		Button1,	spawn,		{.v = dwmenu } },
+        { ClkButton,		0,		Button2,	spawn,		{.v = alt_gr } },
         { ClkButton,            0,              Button3,        spawn,          {.v = sessmgr } },
         { ClkButton,            0,              Button4,        incnmaster,     {.i = +1 } },
         { ClkButton,            0,              Button5,        incnmaster,     {.i = -1 } },

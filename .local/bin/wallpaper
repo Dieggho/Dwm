@@ -1,4 +1,4 @@
 #!/bin/bash
 sleep 0.1
-xdotool key Super+6
+chtag 6
 sxiv -t /usr/share/backgrounds/*

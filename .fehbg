@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '~/.local/share/backgrounds/00.jpg' 
+feh --no-fehbg --bg-fill $HOME/.local/share/backgrounds/00.jpg

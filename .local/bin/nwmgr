@@ -2,7 +2,7 @@
 
 OPTIONS="\
 
- Connman Shell \n\
+ Iwd Shell \n\
  Enable Wifi\n\
  Disable Wifi"
 
@@ -37,13 +37,13 @@ then
         eval $1
         ;;
             )
-        st-arc -e connmanctl
+        st-arc -e iwctl
         ;;
             )
-        connmanctl enable wifi; notify-send --icon=network-wireless 'Network Manager' 'Wifi Enabled'
+        iwctl device wlan0 set-property Powered on; notify-send --icon=network-wireless 'Network Manager' 'Wifi Enabled'
         ;;
             )
-        connmanctl disable wifi; notify-send --icon=network-wireless 'Network Manager' 'Wifi Disabled'
+        iwctl device wlan0 set-property Powered off; notify-send --icon=network-wireless 'Network Manager' 'Wifi Disabled'
         ;;
       *)
         ;;

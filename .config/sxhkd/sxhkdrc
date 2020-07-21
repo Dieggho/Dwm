@@ -28,7 +28,7 @@ mod5 + BackSpace
 
 # Applications
 mod5 + {f,t,r,d,l,a,s,n,Delete,period,b,KP_Divide}
-	{firefox,telegram-desktop,rox,deadbeef,leafpad,mtp,st-arc -e pulsemixer,st-arc -e connmanctl,lxtask,rox,wallpaper,smart-terminal}
+	{firefox,telegram-desktop,rox,deadbeef,leafpad,mtp,st-arc -e pulsemixer,st-arc -e iwctl,lxtask,rox,wallpaper,smart-terminal}
 
 # Volume
 mod5 + {F12,F11,F10}

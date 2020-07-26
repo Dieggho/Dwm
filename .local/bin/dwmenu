@@ -3,7 +3,7 @@ Icons=$HOME/.icons
 cat <<EOF | xmenu -p 0x19 | sh &
 IMG:$Icons/accessories.png	Accessories
 	IMG:$Icons/rox.png	Rox Filer	rox
-	IMG:$Icons/leafpad.png	Leafpad		leafpad
+	IMG:$Icons/leafpad.png	Leafpad		chtag 4; leafpad
 	IMG:$Icons/python.png	Python Shell	python-shell
 	IMG:$Icons/wpaper.png	Wallpaper	chtag 6; wallpaper
 IMG:$Icons/graphics.png		Graphics

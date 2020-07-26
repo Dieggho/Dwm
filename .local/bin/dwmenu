@@ -5,6 +5,7 @@ IMG:$Icons/accessories.png	Accessories
 	IMG:$Icons/rox.png	Rox Filer	rox
 	IMG:$Icons/leafpad.png	Leafpad		leafpad
 	IMG:$Icons/python.png	Python Shell	python-shell
+	IMG:$Icons/wpaper.png	Wallpaper	chtag 6; wallpaper
 IMG:$Icons/graphics.png		Graphics
 	IMG:$Icons/gimp.png	Image editor	chtag 6; org.gimp.GIMP
 IMG:$Icons/internet.png		Internet
@@ -16,12 +17,19 @@ IMG:$Icons/internet.png		Internet
 IMG:$Icons/gaming.png		Gaming
 	IMG:$Icons/retro.png	Retroarch	chtag 6; flatpak --filesystem=home run org.libretro.RetroArch
 	IMG:$Icons/PPSSPP.png	PPSSPP		chtag 6; flatpak --filesystem=home run org.ppsspp.PPSSPP
+	IMG:$Icons/gzdoom.png	GzDoom		chtag 6; org.zdoom.GZDoom
+	IMG:$Icons/dolphin.png	Dolphin Emu	chtag 6; org.DolphinEmu.dolphin-emu
 IMG:$Icons/multimedia.png	Multimedia
 	IMG:$Icons/deadbeef.png	DeadBeef	chtag 1; deadbeef
+	IMG:$Icons/ssr.png	SSR		chtag 7; simplescreenrecorder
+	IMG:$Icons/fblade.png	Flowblade	chtag 6; io.github.jliljebl.Flowblade
+	IMG:$Icons/display.png	Arandr		chtag 7; arandr
+	IMG:$Icons/tuxg.png	TuxGitar	chtag 6; ar.com.tuxguitar.TuxGuitar
+	IMG:$Icons/audac.png	Audacity	chtag 6; org.audacityteam.Audacity
 	IMG:$Icons/sound.png	Sound Settings	st-arc -e pulsemixer
 IMG:$Icons/system.png		System
 	IMG:$Icons/terminal.png	Terminal	terminal
 	IMG:$Icons/terminal.png	Smart Terminal	smart-terminal
-	IMG:$Icons/tty.png	Root Terminal	root-terminal
+	IMG:$Icons/root.png	Root Terminal	root-terminal
 	IMG:$Icons/monitor.png	LXtask		lxtask
 EOF

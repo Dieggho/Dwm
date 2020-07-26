@@ -1,125 +1,27 @@
-#!/bin/bash
-
-OPTIONS="\
- Firefox \n\
- Telegram \n\
- Deadbeef \n\
- RoxFiler \n\
- Terminal \n\
- Smart-Term \n\
- Root-Terminal \n\
- Leafpad \n\
- Pinta \n\
- Transmission \n\
- Private Browser\n\
- Tor Browser \n\
- Pulsemixer \n\
- Wallpaper \n\
- Connman \n\
- Python \n\
- Lxtask \n\
- Arandr \n\
- Record Desktop \n\
- Screenshot \n\
- PlayOnLinux \n\
- RetroArch
-"
-
-
-LAUNCHER="                      \
-dmenu                           \
--l 11                       	\
--w 170                      	\
--x 3                      	\
--y 19
-"
-
-#LAUNCHER="rofi                  \
-#-dmenu                          \
-#-location 1                     \
-#-lines 11                       \
-#-width 337                      \
-#-yoffset 19                     \
-#-columns 2                      \
-#-me-accept-entry MousePrimary   \
-#-me-select-entry MouseDPrimary  \
-#-p Menu				\
-#"
-
-option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
-if [ ${#option} -gt 0 ]
-then
-    case $option in
-      Exit)
-        eval $1
-        ;;
-             )
-        chtag 2; firefox
-        ;;
-            )
-        chtag 1; telegram-desktop 
-        ;;
-            )
-        chtag 1; deadbeef
-        ;;
-            )
-        rox
-        ;;
-            )
-        terminal
-        ;;
-            )
-        smart-terminal
-        ;;
-            )
-        root-terminal
-        ;;
-            )
-        chtag 4 ; leafpad
-        ;;
-            )
-        chtag 6; flatpak --filesystem=home run com.github.PintaProject.Pinta
-        ;;
-            )
-        chtag 3; transmission-gtk
-        ;;
-             )
-        chtag 2; firefox --private-window
-        ;;
-             )
-        chtag 3; /home/void/Documents/tor-browser_en-US/Browser/start-tor-browser
-        ;;
-            )
-        st-arc -e pulsemixer
-        ;;
-            )
-        chtag 6; wallpaper
-        ;;
-            )
-        st-arc -e connmanctl
-        ;;
-            )
-        python-shell
-        ;;
-            )
-        lxtask
-        ;;
-            )
-        arandr
-        ;;
-            )
-        chtag 7; simplescreenrecorder
-        ;;
-            )
-        sleep 0.5; screenshot
-        ;;
-            )
-        chtag 7; flatpak run org.phoenicis.playonlinux
-        ;;
-            )
-        chtag 6; flatpak --filesystem=home run org.libretro.RetroArch
-        ;;
-      *)
-        ;;
-    esac
-fi
+#!/bin/sh
+Icons=$HOME/.icons
+cat <<EOF | xmenu -p 0x19 | sh &
+IMG:$Icons/accessories.png	Accessories
+	IMG:$Icons/rox.png	Rox Filer	rox
+	IMG:$Icons/leafpad.png	Leafpad		leafpad
+	IMG:$Icons/python.png	Python Shell	python-shell
+IMG:$Icons/graphics.png		Graphics
+	IMG:$Icons/gimp.png	Image editor	chtag 6; org.gimp.GIMP
+IMG:$Icons/internet.png		Internet
+	IMG:$Icons/telegram.png	Telegram	chtag 1; telegram-desktop
+	IMG:$Icons/firefox.png	Firefox		chtag 2; firefox
+	IMG:$Icons/private.png	Private Browser	chtag 2; firefox --private-window
+	IMG:$Icons/tor.png	Tor Browser	chtag 3; /home/void/Documents/tor-browser_en-US/Browser/start-tor-browser
+	IMG:$Icons/torrent.png	Transmission	chtag 3; transmission-gtk
+IMG:$Icons/gaming.png		Gaming
+	IMG:$Icons/retro.png	Retroarch	chtag 6; flatpak --filesystem=home run org.libretro.RetroArch
+	IMG:$Icons/PPSSPP.png	PPSSPP		chtag 6; flatpak --filesystem=home run org.ppsspp.PPSSPP
+IMG:$Icons/multimedia.png	Multimedia
+	IMG:$Icons/deadbeef.png	DeadBeef	chtag 1; deadbeef
+	IMG:$Icons/sound.png	Sound Settings	st-arc -e pulsemixer
+IMG:$Icons/system.png		System
+	IMG:$Icons/terminal.png	Terminal	terminal
+	IMG:$Icons/terminal.png	Smart Terminal	smart-terminal
+	IMG:$Icons/tty.png	Root Terminal	root-terminal
+	IMG:$Icons/monitor.png	LXtask		lxtask
+EOF

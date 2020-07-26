@@ -1,52 +1,8 @@
-#!/bin/bash
-
-OPTIONS="\
- Logoff\n\
- Lock screen\n\
- Reboot\n\
- Power-off"
-
-LAUNCHER="                      \
-dmenu                           \
--l 4                       	\
--w 140                      	\
--x 3                      	\
--y 19
-"
-
-#LAUNCHER="                      \
-#rofi                            \
-#-dmenu                          \
-#-location 1                     \
-#-lines 4                        \
-#-width 13                       \
-#-yoffset 19                     \
-#-columns 2                      \
-#-me-accept-entry MousePrimary   \
-#-me-select-entry MouseDPrimary  \
-#-p Session                      \
-#"
-
-option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
-if [ ${#option} -gt 0 ]
-then
-    case $option in
-      Exit)
-        eval $1
-        ;;
-             )
-        pkill dwm
-        ;;
-            )
-	lock
-        ;;
-            )
-        systemctl reboot
-        ;;
-            )
-        systemctl poweroff
-        ;;
-      *)
-        ;;
-    esac
-fi
+#!/bin/sh
+Icons=$HOME/.icons
+cat <<EOF | xmenu -p 0x19 | sh &
+IMG:$Icons/logoff.png	Logoff		pkill dwm
+IMG:$Icons/lock.png	Lock screen	lock
+IMG:$Icons/reboot.png	Reboot		reboot
+IMG:$Icons/poweroff.png	Shutdown	-terminalpoweroff
+EOF

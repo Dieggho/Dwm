@@ -1,51 +1,7 @@
-#!/bin/bash
-
-OPTIONS="\
-
- Iwd Shell \n\
- Enable Wifi\n\
- Disable Wifi"
-
-
-LAUNCHER="                      \
-dmenu                           \
--l 4                       	\
--w 140                      	\
--x 1090                      	\
--y 19
-"
-
-#LAUNCHER="                      \
-#rofi                            \
-#-dmenu                          \
-#-location 1                     \
-#-lines 3                        \
-#-width 13                       \
-#-xoffset 1050                   \
-#-yoffset 19                     \
-#-columns 2                      \
-#-me-accept-entry MousePrimary   \
-#-me-select-entry MouseDPrimary  \
-#-p Network                      \
-#"
-
-option=`echo -e $OPTIONS | $LAUNCHER | awk '{print $1}' | tr -d '\r\n'`
-if [ ${#option} -gt 0 ]
-then
-    case $option in
-      Exit)
-        eval $1
-        ;;
-            )
-        st-arc -e iwctl
-        ;;
-            )
-        iwctl device wlan0 set-property Powered on; notify-send --icon=network-wireless 'Network Manager' 'Wifi Enabled'
-        ;;
-            )
-        iwctl device wlan0 set-property Powered off; notify-send --icon=network-wireless 'Network Manager' 'Wifi Disabled'
-        ;;
-      *)
-        ;;
-    esac
-fi
+#!/bin/sh
+Icons=$HOME/.icons
+cat <<EOF | xmenu -p 1100x19 | sh &
+IMG:$Icons/wireless.png	Iwd Shell	st-arc -e iwctl
+IMG:$Icons/wifion.png	Enable		iwctl device wlan0 set-property Powered on; notify-send --icon=network-wireless 'Network Manager' 'Wifi Enabled'
+IMG:$Icons/wifioff.png	Disable		iwctl device wlan0 set-property Powered off; notify-send --icon=network-wireless 'Network Manager' 'Wifi Disabled'
+EOF

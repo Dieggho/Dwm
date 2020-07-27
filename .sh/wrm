@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Set distance
+d=20
+
+# Set windows id
+id=`xdo id`
+
+case $1 in
+	+w)
+		xdo resize -w +$d;;
+	-w)
+		xdo resize -w -$d;;
+	+h)
+		xdo resize -h +$d;;
+	-h)
+		xdo resize -h -$d;;
+	up)
+		xdo move -y -$d $id
+	        xdo pointer_motion -x 0 -y -$d;;
+	down)
+		xdo move -y +$d $id
+		xdo pointer_motion -x 0 -y +$d;;
+	left)
+		xdo move -x -$d $id
+		xdo pointer_motion -x -$d -y 0;;
+	right)
+		xdo move -x +$d $id
+		xdo pointer_motion -x +$d -y 0;;
+esac

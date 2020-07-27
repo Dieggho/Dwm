@@ -1,0 +1,8 @@
+#!/bin/bash
+sleep 0.1
+chtag 5
+st-arc \
+-c Terminal \
+-n Terminal \
+-t Terminal \
+#-g 89x29

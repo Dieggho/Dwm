@@ -118,6 +118,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0";               /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] =              { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-p", "run", NULL };
 static const char *termcmd[] =               { "terminal", NULL }; /* change me to any terminal you want */
+static const char *smrtermcmd[] =            { "smart-terminal", NULL };
 static const char *dwmenu[] =                { "dwmenu", NULL };
 static const char *sessmgr[] =               { "session-manager", NULL }; 
 static const char *nwmgr[] =                 { "nwmgr", NULL };
@@ -147,6 +148,10 @@ static Key keys[] = {
 	{ Mod5Mask|ShiftMask,           XK_Down,   spawn,          {.v = plus_h } },
 	{ Mod5Mask|ShiftMask,           XK_Left,   spawn,          {.v = minus_w } },
 	{ Mod5Mask|ShiftMask,           XK_Right,  spawn,          {.v = plus_w } },
+	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ Mod5Mask,                     XK_p,      spawn,          {.v = dmenucmd } },
+	{ Mod5Mask,                     XK_Return, spawn,          {.v = termcmd } },
+	{ ControlMask|Mod1Mask,         XK_t,      spawn,          {.v = smrtermcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY|ShiftMask,             XK_s,      pushdown,       {0} },
     	{ MODKEY|ShiftMask,             XK_w,      pushup,         {0} },
@@ -160,8 +165,6 @@ static Key keys[] = {
         { MODKEY,                       XK_space,  togglefloating, {0} },
 	{ Mod5Mask,                     XK_k,      killclient,     {0} },
 	{ MODKEY,                       XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ Mod5Mask,                     XK_p,      spawn,          {.v = dmenucmd } },
         { MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },

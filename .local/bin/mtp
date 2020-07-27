@@ -1,2 +1,0 @@
-#!/bin/bash
-simple-mtpfs ~/Desktop/Phone -o allow_other

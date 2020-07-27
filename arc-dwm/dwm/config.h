@@ -161,6 +161,7 @@ static Key keys[] = {
 	{ Mod5Mask,                     XK_k,      killclient,     {0} },
 	{ MODKEY,                       XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ Mod5Mask,                     XK_p,      spawn,          {.v = dmenucmd } },
         { MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },

@@ -1,0 +1,4 @@
+#!/bin/bash
+sleep 0.1
+chtag 6
+sxiv -t ~/.local/share/backgrounds/*

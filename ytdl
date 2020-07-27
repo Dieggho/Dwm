@@ -1,0 +1,2 @@
+#!/bin/bash
+ youtube-dl --recode-video mp4 $1

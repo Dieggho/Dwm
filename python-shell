@@ -1,0 +1,6 @@
+#!/bin/bash
+st-arc			\
+-c SmartTerm		\
+-n Smart-Terminal	\
+-t Python-Shell		\
+-e python

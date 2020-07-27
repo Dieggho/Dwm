@@ -1,0 +1,59 @@
+#!/bin/bash
+case $1 in
+	1)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 67
+		xdo key_release -k 67
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;
+	2)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 68
+		xdo key_release -k 68
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;
+	3)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 69
+		xdo key_release -k 69
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;
+	4)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 70
+		xdo key_release -k 70
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;
+	5)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 71
+		xdo key_release -k 71
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;
+	6)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 72
+		xdo key_release -k 72
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;	
+	7)
+		xdo key_press -k 37
+		xdo key_press -k 64 
+		xdo key_press -k 73
+		xdo key_release -k 73
+		xdo key_release -k 64
+		xdo key_release -k 37
+		;;
+esac

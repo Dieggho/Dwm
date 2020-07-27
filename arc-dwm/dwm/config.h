@@ -124,6 +124,7 @@ static const char *sessmgr[] =               { "session-manager", NULL };
 static const char *nwmgr[] =                 { "nwmgr", NULL };
 static const char *vup[] =                   { "pactl", "set-sink-volume", "0", "+5%", NULL }; /* use it with Pulseaudio */
 static const char *vdown[] =                 { "pactl", "set-sink-volume", "0", "-5%", NULL }; /* use it with Pulseaudio */
+static const char *vmute[] =                 { "pactl", "set-sink-mute", "0", "toggle", NULL }; /* use it with Pulseaudio */
 //static const char *vup[]   =                 { "amixer", "set", "Master", "3+",     NULL }; /* use it with Alsa-Utils */
 //static const char *vdown[] =                 { "amixer", "set", "Master", "3-",     NULL }; /* use it with Alsa-Utils */
 static const char *plus_w[] =                { "wrm", "+w", NULL };
@@ -140,6 +141,9 @@ static const char *alt_gr[] =                { "alt_gr", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+	{ 0,                            XF86AudioMute,             spawn,          {.v = vmute } },
+	{ 0,                            XF86AudioRaiseVolume,      spawn,          {.v = vup } },
+	{ 0,                            XF86AudioLowerVolume,      spawn,          {.v = vdown } },
 	{ Mod5Mask,                     XK_Up,     spawn,          {.v = up } },
 	{ Mod5Mask,                     XK_Down,   spawn,          {.v = down } },
 	{ Mod5Mask,                     XK_Left,   spawn,          {.v = left } },

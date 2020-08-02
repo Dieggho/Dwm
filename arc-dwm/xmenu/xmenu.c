@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <err.h>
 #include <errno.h>
 #include <stdio.h>
@@ -12,6 +13,7 @@
 #include <X11/Xresource.h>
 #include <X11/XKBlib.h>
 #include <X11/Xft/Xft.h>
+#include <X11/extensions/Xinerama.h>
 #include <Imlib2.h>
 #include "xmenu.h"
 
@@ -20,13 +22,15 @@
  */
 
 /* argument parser */
-static void parseposition(const char *optarg);
+static void parseposition(char *optarg);
 
 /* initializers, and their helper routines */
+static void parsefonts(const char *s);
 static void ealloccolor(const char *s, XftColor *color);
+static void initmonitor(void);
 static void initresources(void);
 static void initdc(void);
-static void initconfig(void);
+static void initiconsize(void);
 static void initatoms(void);
 
 /* structure builders, and their helper routines */
@@ -35,8 +39,10 @@ static struct Menu *allocmenu(struct Menu *parent, struct Item *list, unsigned l
 static struct Menu *buildmenutree(unsigned level, const char *label, const char *output, char *file);
 static struct Menu *parsestdin(void);
 
-/* image loader */
-static Imlib_Image loadicon(const char *file);
+/* text drawer, and its helper routine */
+static FcChar32 getnextutf8char(const char *s, const char **end_ret);
+static XftFont *getfontucode(FcChar32 ucode);
+static int drawtext(XftDraw *draw, XftColor *color, int x, int y, unsigned h, const char *text);
 
 /* structure setters, and their helper routines */
 static void setupitems(struct Menu *menu);
@@ -47,16 +53,22 @@ static void setupmenu(struct Menu *menu, XClassHint *classh);
 static void grabpointer(void);
 static void grabkeyboard(void);
 
-/* window drawers and mappers */
-static void mapmenu(struct Menu *currmenu);
-static void drawseparator(struct Menu *menu, struct Item *item);
-static void drawitem(struct Menu *menu, struct Item *item, XftColor *color);
-static void drawmenu(struct Menu *currmenu);
+/* item drawer, and its helper routine */
+static Imlib_Image loadicon(const char *file);
+static void drawitems(struct Menu *menu);
 
-/* main event loop, and its helper routines */
+/* menu drawers and mappers */
+static void drawmenus(struct Menu *currmenu);
+static void mapmenu(struct Menu *currmenu);
+
+/* getters */
 static struct Menu *getmenu(struct Menu *currmenu, Window win);
 static struct Item *getitem(struct Menu *menu, int y);
+
+/* cycle through items */
 static struct Item *itemcycle(struct Menu *currmenu, int direction);
+
+/* main event loop */
 static void run(struct Menu *currmenu);
 
 /* cleaners */
@@ -78,13 +90,15 @@ static Visual *visual;
 static Window rootwin;
 static Colormap colormap;
 static struct DC dc;
+static struct Monitor mon;
 static Atom utf8string;
 static Atom wmdelete;
 static Atom netatom[NetLast];
 
 /* flags */
 static int iflag = 0;   /* whether to disable icons */
-static int pflag = 0;   /* whether the user specified a position */
+static int mflag = 0;   /* whether the user specified a monitor with -p */
+static int pflag = 0;   /* whether the user specified a position with -p */
 static int wflag = 0;   /* whether to let the window manager control XMenu */
 
 /* include config variable */
@@ -144,9 +158,10 @@ main(int argc, char *argv[])
 	}
 
 	/* initializers */
+	initmonitor();
 	initresources();
 	initdc();
-	initconfig();
+	initiconsize();
 	initatoms();
 
 	/* set window class */
@@ -178,12 +193,13 @@ main(int argc, char *argv[])
 	return 0;
 }
 
-/* parse position string from -p, put results on config.x and config.y */
+/* parse position string from -p,
+ * put results on config.posx, config.posy, and config.monitor */
 static void
-parseposition(const char *optarg)
+parseposition(char *optarg)
 {
 	long n;
-	const char *s = optarg;
+	char *s = optarg;
 	char *endp;
 
 	n = strtol(s, &endp, 10);
@@ -192,14 +208,68 @@ parseposition(const char *optarg)
 	config.posx = n;
 	s = endp+1;
 	n = strtol(s, &endp, 10);
-	if (errno == ERANGE || n > INT_MAX || n < 0 || endp == s || *endp != '\0')
+	if (errno == ERANGE || n > INT_MAX || n < 0 || endp == s)
 		goto error;
 	config.posy = n;
+	if (*endp == ':') {
+		s = endp+1;
+		mflag = 1;
+		if (strncasecmp(s, "CUR", 3) == 0) {
+			config.monitor = -1;
+			endp = s+3;
+		} else {
+			n = strtol(s, &endp, 10);
+			if (errno == ERANGE || n > INT_MAX || n < 0 || endp == s || *endp != '\0')
+				goto error;
+			config.monitor = n;
+		}
+	} else if (*endp != '\0') {
+		goto error;
+	}
 
 	return;
 
 error:
 	errx(1, "improper position: %s", optarg);
+}
+
+/* parse color string */
+static void
+parsefonts(const char *s)
+{
+	const char *p;
+	char buf[1024];
+	size_t nfont = 0;
+
+	dc.nfonts = 1;
+	for (p = s; *p; p++)
+		if (*p == ',')
+			dc.nfonts++;
+
+	if ((dc.fonts = calloc(dc.nfonts, sizeof *dc.fonts)) == NULL)
+		err(1, "calloc");
+
+	p = s;
+	while (*p != '\0') {
+		size_t i;
+
+		i = 0;
+		while (isspace(*p))
+			p++;
+		while (i < sizeof buf && *p != '\0' && *p != ',') {
+			buf[i++] = *p++;
+		}
+		if (i >= sizeof buf)
+			errx(1, "font name too long");
+		if (*p == ',')
+			p++;
+		buf[i] = '\0';
+		if (nfont == 0)
+			if ((dc.pattern = FcNameParse((FcChar8 *)buf)) == NULL)
+				errx(1, "the first font in the cache must be loaded from a font string");
+		if ((dc.fonts[nfont++] = XftFontOpenName(dpy, screen, buf)) == NULL)
+			errx(1, "cannot load font");
+	}
 }
 
 /* get color from color string */
@@ -208,6 +278,54 @@ ealloccolor(const char *s, XftColor *color)
 {
 	if(!XftColorAllocName(dpy, visual, colormap, s, color))
 		errx(1, "cannot allocate color: %s", s);
+}
+
+/* query monitor information and cursor position */
+static void
+initmonitor(void)
+{
+	XineramaScreenInfo *info = NULL;
+	Window dw;          /* dummy variable */
+	int di;             /* dummy variable */
+	unsigned du;        /* dummy variable */
+	int cursx, cursy;   /* cursor position */
+	int nmons;
+	int i;
+
+	XQueryPointer(dpy, rootwin, &dw, &dw, &cursx, &cursy, &di, &di, &du);
+
+	mon.x = mon.y = 0;
+	mon.w = DisplayWidth(dpy, screen);
+	mon.h = DisplayHeight(dpy, screen);
+
+	if ((info = XineramaQueryScreens(dpy, &nmons)) != NULL) {
+		int selmon = 0;
+
+		if (!mflag || (mflag && (config.monitor < 0 || config.monitor >= nmons))) {
+			for (i = 0; i < nmons; i++) {
+				if (BETWEEN(cursx, info[i].x_org, info[i].x_org + info[i].width) &&
+				    BETWEEN(cursy, info[i].y_org, info[i].y_org + info[i].height)) {
+					selmon = i;
+					break;
+				}
+			}
+		} else {
+			selmon = config.monitor;
+		}
+
+		mon.x = info[selmon].x_org;
+		mon.y = info[selmon].y_org;
+		mon.w = info[selmon].width;
+		mon.h = info[selmon].height;
+	}
+
+	if (!pflag) {
+		config.posx = cursx;
+		config.posy = cursy;
+	} else if (mflag) {
+		config.posx += mon.x;
+		config.posy += mon.y;
+	}
 }
 
 /* read xrdb for configuration options */
@@ -271,26 +389,17 @@ initdc(void)
 	ealloccolor(config.separator_color,     &dc.separator);
 	ealloccolor(config.border_color,        &dc.border);
 
-	/* try to get font */
-	if ((dc.font = XftFontOpenName(dpy, screen, config.font)) == NULL)
-		errx(1, "cannot load font");
+	/* parse fonts */
+	parsefonts(config.font);
 
 	/* create common GC */
 	dc.gc = XCreateGC(dpy, rootwin, 0, NULL);
 }
 
-/* calculate configuration values that are not set manually */
+/* calculate icon size */
 static void
-initconfig(void)
+initiconsize(void)
 {
-	Window dw;   /* dummy variable */
-	int di;      /* dummy variable */
-	unsigned du; /* dummy variable */
-
-	if (!pflag)  /* if the user haven't specified a position, use cursor position*/
-		XQueryPointer(dpy, rootwin, &dw, &dw, &config.posx, &config.posy, &di, &di, &du);
-	config.screenw = DisplayWidth(dpy, screen);
-	config.screenh = DisplayHeight(dpy, screen);
 	config.iconsize = config.height_pixels - config.iconpadding * 2;
 }
 
@@ -334,10 +443,6 @@ allocitem(const char *label, const char *output, char *file)
 	}
 	item->y = 0;
 	item->h = 0;
-	if (item->label == NULL)
-		item->labellen = 0;
-	else
-		item->labellen = strlen(item->label);
 	item->next = NULL;
 	item->submenu = NULL;
 	item->icon = NULL;
@@ -358,11 +463,13 @@ allocmenu(struct Menu *parent, struct Item *list, unsigned level)
 	menu->list = list;
 	menu->caller = NULL;
 	menu->selected = NULL;
-	menu->w = 0;    /* calculated by setupmenu() */
-	menu->h = 0;    /* calculated by setupmenu() */
-	menu->x = 0;    /* calculated by setupmenu() */
-	menu->y = 0;    /* calculated by setupmenu() */
+	menu->w = 0;        /* recalculated by setupmenu() */
+	menu->h = 0;        /* recalculated by setupmenu() */
+	menu->x = mon.x;    /* recalculated by setupmenu() */
+	menu->y = mon.y;    /* recalculated by setupmenu() */
 	menu->level = level;
+	menu->drawn = 0;
+	menu->hasicon = 0;
 
 	swa.override_redirect = (wflag) ? False : True;
 	swa.background_pixel = dc.normal[ColorBG].pixel;
@@ -437,6 +544,9 @@ buildmenutree(unsigned level, const char *label, const char *output, char *file)
 		curritem->prev = NULL;
 	}
 
+	if (curritem->file)
+		prevmenu->hasicon = 1;
+
 	return rootmenu;
 }
 
@@ -481,42 +591,149 @@ parsestdin(void)
 	return rootmenu;
 }
 
-/* load and scale icon */
-static Imlib_Image
-loadicon(const char *file)
+/* get next utf8 char from s return its codepoint and set next_ret to pointer to end of character */
+static FcChar32
+getnextutf8char(const char *s, const char **next_ret)
 {
-	Imlib_Image icon;
-	int width;
-	int height;
-	int imgsize;
+	static const unsigned char utfbyte[] = {0x80, 0x00, 0xC0, 0xE0, 0xF0};
+	static const unsigned char utfmask[] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
+	static const FcChar32 utfmin[] = {0, 0x00,  0x80,  0x800,  0x10000};
+	static const FcChar32 utfmax[] = {0, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
+	/* 0xFFFD is the replacement character, used to represent unknown characters */
+	static const FcChar32 unknown = 0xFFFD;
+	FcChar32 ucode;         /* FcChar32 type holds 32 bits */
+	size_t usize = 0;       /* n' of bytes of the utf8 character */
+	size_t i;
 
-	icon = imlib_load_image(file);
-	if (icon == NULL)
-		errx(1, "cannot load icon %s", file);
+	*next_ret = s+1;
 
-	imlib_context_set_image(icon);
+	/* get code of first byte of utf8 character */
+	for (i = 0; i < sizeof utfmask; i++) {
+		if (((unsigned char)*s & utfmask[i]) == utfbyte[i]) {
+			usize = i;
+			ucode = (unsigned char)*s & ~utfmask[i];
+			break;
+		}
+	}
 
-	width = imlib_image_get_width();
-	height = imlib_image_get_height();
-	imgsize = MIN(width, height);
+	/* if first byte is a continuation byte or is not allowed, return unknown */
+	if (i == sizeof utfmask || usize == 0)
+		return unknown;
 
-	icon = imlib_create_cropped_scaled_image(0, 0, imgsize, imgsize,
-	                                         config.iconsize,
-	                                         config.iconsize);
+	/* check the other usize-1 bytes */
+	s++;
+	for (i = 1; i < usize; i++) {
+		*next_ret = s+1;
+		/* if byte is nul or is not a continuation byte, return unknown */
+		if (*s == '\0' || ((unsigned char)*s & utfmask[0]) != utfbyte[0])
+			return unknown;
+		/* 6 is the number of relevant bits in the continuation byte */
+		ucode = (ucode << 6) | ((unsigned char)*s & ~utfmask[0]);
+		s++;
+	}
 
-	return icon;
+	/* check if ucode is invalid or in utf-16 surrogate halves */
+	if (!BETWEEN(ucode, utfmin[usize], utfmax[usize])
+	    || BETWEEN (ucode, 0xD800, 0xDFFF))
+		return unknown;
+
+	return ucode;
+}
+
+/* get which font contains a given code point */
+static XftFont *
+getfontucode(FcChar32 ucode)
+{
+	FcCharSet *fccharset = NULL;
+	FcPattern *fcpattern = NULL;
+	FcPattern *match = NULL;
+	XftFont *retfont = NULL;
+	XftResult result;
+	size_t i;
+
+	for (i = 0; i < dc.nfonts; i++)
+		if (XftCharExists(dpy, dc.fonts[i], ucode) == FcTrue)
+			return dc.fonts[i];
+
+	/* create a charset containing our code point */
+	fccharset = FcCharSetCreate();
+	FcCharSetAddChar(fccharset, ucode);
+
+	/* create a pattern akin to the dc.pattern but containing our charset */
+	if (fccharset) {
+		fcpattern = FcPatternDuplicate(dc.pattern);
+		FcPatternAddCharSet(fcpattern, FC_CHARSET, fccharset);
+	}
+
+	/* find pattern matching fcpattern */
+	if (fcpattern) {
+		FcConfigSubstitute(NULL, fcpattern, FcMatchPattern);
+		FcDefaultSubstitute(fcpattern);
+		match = XftFontMatch(dpy, screen, fcpattern, &result);
+	}
+
+	/* if found a pattern, open its font */
+	if (match) {
+		retfont = XftFontOpenPattern(dpy, match);
+		if (retfont && XftCharExists(dpy, retfont, ucode) == FcTrue) {
+			if ((dc.fonts = realloc(dc.fonts, dc.nfonts+1)) == NULL)
+				err(1, "realloc");
+			dc.fonts[dc.nfonts] = retfont;
+			return dc.fonts[dc.nfonts++];
+		} else {
+			XftFontClose(dpy, retfont);
+		}
+	}
+
+	/* in case no fount was found, return the first one */
+	return dc.fonts[0];
+}
+
+/* draw text into XftDraw, return width of text glyphs */
+static int
+drawtext(XftDraw *draw, XftColor *color, int x, int y, unsigned h, const char *text)
+{
+	int textwidth = 0;
+
+	while (*text) {
+		XftFont *currfont;
+		XGlyphInfo ext;
+		FcChar32 ucode;
+		const char *next;
+		size_t len;
+
+		ucode = getnextutf8char(text, &next);
+		currfont = getfontucode(ucode);
+
+		len = next - text;
+		XftTextExtentsUtf8(dpy, currfont, (XftChar8 *)text, len, &ext);
+		textwidth += ext.xOff;
+
+		if (draw) {
+			int texty;
+
+			texty = y + (h - (currfont->ascent + currfont->descent))/2 + currfont->ascent;
+			XftDrawStringUtf8(draw, color, currfont, x, texty, (XftChar8 *)text, len);
+			x += ext.xOff;
+		}
+
+		text = next;
+	}
+
+	return textwidth;
 }
 
 /* setup the height, width and icon of the items of a menu */
 static void
 setupitems(struct Menu *menu)
 {
-	XGlyphInfo ext;
 	struct Item *item;
-	int itemwidth;
 
 	menu->w = config.width_pixels;
 	for (item = menu->list; item != NULL; item = item->next) {
+		int itemwidth;
+		int textwidth;
+
 		item->y = menu->h;
 
 		if (item->label == NULL)   /* height for separator item */
@@ -525,50 +742,26 @@ setupitems(struct Menu *menu)
 			item->h = config.height_pixels;
 		menu->h += item->h;
 
-		/* get length of item->label rendered in the font */
-		XftTextExtentsUtf8(dpy, dc.font, (XftChar8 *)item->label,
-		                   item->labellen, &ext);
+		if (item->label)
+			textwidth = drawtext(NULL, NULL, 0, 0, 0, item->label);
+		else
+			textwidth = 0;
 
 		/*
 		 * set menu width
 		 *
-		 * the item width depends on the size of its label (ext.xOff),
+		 * the item width depends on the size of its label (textwidth),
 		 * and it is only used to calculate the width of the menu (which
 		 * is equal to the width of the largest item).
 		 *
 		 * the horizontal padding appears 4 times through the width of a
-		 * item: before and after its icon, and before and after its triangle
+		 * item: before and after its icon, and before and after its triangle.
 		 * if the iflag is set (icons are disabled) then the horizontal
-		 * padding appears before the label and around the triangle.
+		 * padding appears 3 times: before the label and around the triangle.
 		 */
-		itemwidth = ext.xOff + config.triangle_width + config.horzpadding * 3;
-		itemwidth += (iflag) ? 0 : config.iconsize + config.horzpadding;
+		itemwidth = textwidth + config.triangle_width + config.horzpadding * 3;
+		itemwidth += (iflag || !menu->hasicon) ? 0 : config.iconsize + config.horzpadding;
 		menu->w = MAX(menu->w, itemwidth);
-
-		/* create icon */
-		if (item->file != NULL && !iflag) {
-			item->icon = loadicon(item->file);
-
-			item->sel = XCreatePixmap(dpy, menu->win,
-			                          config.iconsize, config.iconsize,
-			                          DefaultDepth(dpy, screen));
-			XSetForeground(dpy, dc.gc, dc.selected[ColorBG].pixel);
-			XFillRectangle(dpy, item->sel, dc.gc, 0, 0,
-			               config.iconsize, config.iconsize);
-			imlib_context_set_drawable(item->sel);
-			imlib_context_set_image(item->icon);
-			imlib_render_image_on_drawable(0, 0);
-
-			item->unsel = XCreatePixmap(dpy, menu->win,
-			                            config.iconsize, config.iconsize,
-			                            DefaultDepth(dpy, screen));
-			XSetForeground(dpy, dc.gc, dc.normal[ColorBG].pixel);
-			XFillRectangle(dpy, item->unsel, dc.gc, 0, 0,
-			               config.iconsize, config.iconsize);
-			imlib_context_set_drawable(item->unsel);
-			imlib_context_set_image(item->icon);
-			imlib_render_image_on_drawable(0, 0);
-		}
 	}
 }
 
@@ -581,27 +774,29 @@ setupmenupos(struct Menu *menu)
 	width = menu->w + config.border_pixels * 2;
 	height = menu->h + config.border_pixels * 2;
 	if (menu->parent == NULL) { /* if root menu, calculate in respect to cursor */
-		if (pflag || config.screenw - config.posx >= menu->w)
+		if (pflag || (config.posx > mon.x && mon.x + mon.w - config.posx >= width))
 			menu->x = config.posx;
 		else if (config.posx > width)
 			menu->x = config.posx - width;
 
-		if (pflag || config.screenh - config.posy >= height)
+		if (pflag || (config.posy > mon.y && mon.y + mon.h - config.posy >= height))
 			menu->y = config.posy;
-		else if (config.screenh > height)
-			menu->y = config.screenh - height;
+		else if (mon.y + mon.h > height)
+			menu->y = mon.y + mon.h - height;
 	} else {                    /* else, calculate in respect to parent menu */
-		if (config.screenw - (menu->parent->x + menu->parent->w + config.border_pixels + config.gap_pixels) >= width)
-			menu->x = menu->parent->x + menu->parent->w + config.border_pixels + config.gap_pixels;
+		int parentwidth;
+
+		parentwidth = menu->parent->x + menu->parent->w + config.border_pixels + config.gap_pixels;
+
+		if (mon.x + mon.w - parentwidth >= width)
+			menu->x = parentwidth;
 		else if (menu->parent->x > menu->w + config.border_pixels + config.gap_pixels)
 			menu->x = menu->parent->x - menu->w - config.border_pixels - config.gap_pixels;
 
-		if (config.screenh - (menu->caller->y + menu->parent->y) > height)
+		if (mon.y + mon.h - (menu->caller->y + menu->parent->y) >= height)
 			menu->y = menu->caller->y + menu->parent->y;
-		else if (config.screenh - menu->parent->y > height)
-			menu->y = menu->parent->y;
-		else if (config.screenh > height)
-			menu->y = config.screenh - height;
+		else if (mon.y + mon.h > height)
+			menu->y = mon.y + mon.h - height;
 	}
 }
 
@@ -636,15 +831,10 @@ setupmenu(struct Menu *menu, XClassHint *classh)
 	XStringListToTextProperty(&title, 1, &wintitle);
 
 	/* set window manager hints */
-	sizeh.flags = PMaxSize | PMinSize;
+	sizeh.flags = USPosition | PMaxSize | PMinSize;
 	sizeh.min_width = sizeh.max_width = menu->w;
 	sizeh.min_height = sizeh.max_height = menu->h;
 	XSetWMProperties(dpy, menu->win, &wintitle, NULL, NULL, 0, &sizeh, NULL, classh);
-
-	/* create pixmap and XftDraw */
-	menu->pixmap = XCreatePixmap(dpy, menu->win, menu->w, menu->h,
-	                             DefaultDepth(dpy, screen));
-	menu->draw = XftDrawCreate(dpy, menu->pixmap, visual, colormap);
 
 	/* set WM protocols and ewmh window properties */
 	XSetWMProtocols(dpy, menu->win, &wmdelete, 1);
@@ -692,6 +882,131 @@ grabkeyboard(void)
 		nanosleep(&ts, NULL);
 	}
 	errx(1, "cannot grab keyboard");
+}
+
+/* load and scale icon */
+static Imlib_Image
+loadicon(const char *file)
+{
+	Imlib_Image icon;
+	int width;
+	int height;
+	int imgsize;
+
+	icon = imlib_load_image(file);
+	if (icon == NULL)
+		errx(1, "cannot load icon %s", file);
+
+	imlib_context_set_image(icon);
+
+	width = imlib_image_get_width();
+	height = imlib_image_get_height();
+	imgsize = MIN(width, height);
+
+	icon = imlib_create_cropped_scaled_image(0, 0, imgsize, imgsize,
+	                                         config.iconsize,
+	                                         config.iconsize);
+
+	return icon;
+}
+
+/* draw pixmap for the selected and unselected version of each item on menu */
+static void
+drawitems(struct Menu *menu)
+{
+	struct Item *item;
+
+	for (item = menu->list; item != NULL; item = item->next) {
+		XftDraw *dsel, *dunsel;
+		int x, y;
+
+		item->unsel = XCreatePixmap(dpy, menu->win, menu->w, item->h,
+		                          DefaultDepth(dpy, screen));
+
+		XSetForeground(dpy, dc.gc, dc.normal[ColorBG].pixel);
+		XFillRectangle(dpy, item->unsel, dc.gc, 0, 0, menu->w, item->h);
+
+		if (item->label == NULL) { /* item is separator */
+			y = item->h/2;
+			XSetForeground(dpy, dc.gc, dc.separator.pixel);
+			XDrawLine(dpy, item->unsel, dc.gc, config.horzpadding, y,
+			          menu->w - config.horzpadding, y);
+
+			item->sel = item->unsel;
+		} else {
+
+			item->sel = XCreatePixmap(dpy, menu->win, menu->w, item->h,
+			                          DefaultDepth(dpy, screen));
+			XSetForeground(dpy, dc.gc, dc.selected[ColorBG].pixel);
+			XFillRectangle(dpy, item->sel, dc.gc, 0, 0, menu->w, item->h);
+
+			/* draw text */
+			x = config.horzpadding;
+			x += (iflag || !menu->hasicon) ? 0 : config.horzpadding + config.iconsize;
+			dsel = XftDrawCreate(dpy, item->sel, visual, colormap);
+			dunsel = XftDrawCreate(dpy, item->unsel, visual, colormap);
+			XSetForeground(dpy, dc.gc, dc.selected[ColorFG].pixel);
+			drawtext(dsel, &dc.selected[ColorFG], x, 0, item->h, item->label);
+			XSetForeground(dpy, dc.gc, dc.normal[ColorFG].pixel);
+			drawtext(dunsel, &dc.normal[ColorFG], x, 0, item->h, item->label);
+			XftDrawDestroy(dsel);
+			XftDrawDestroy(dunsel);
+
+			/* draw triangle */
+			if (item->submenu != NULL) {
+				x = menu->w - config.triangle_width - config.horzpadding;
+				y = (item->h - config.triangle_height + 1) / 2;
+
+				XPoint triangle[] = {
+					{x, y},
+					{x + config.triangle_width, y + config.triangle_height/2},
+					{x, y + config.triangle_height},
+					{x, y}
+				};
+
+				XSetForeground(dpy, dc.gc, dc.selected[ColorFG].pixel);
+				XFillPolygon(dpy, item->sel, dc.gc, triangle, LEN(triangle),
+				             Convex, CoordModeOrigin);
+				XSetForeground(dpy, dc.gc, dc.normal[ColorFG].pixel);
+				XFillPolygon(dpy, item->unsel, dc.gc, triangle, LEN(triangle),
+				             Convex, CoordModeOrigin);
+			}
+
+			/* draw icon */
+			if (item->file != NULL && !iflag) {
+				item->icon = loadicon(item->file);
+
+				imlib_context_set_image(item->icon);
+				imlib_context_set_drawable(item->sel);
+				imlib_render_image_on_drawable(config.horzpadding, config.iconpadding);
+				imlib_context_set_drawable(item->unsel);
+				imlib_render_image_on_drawable(config.horzpadding, config.iconpadding);
+			}
+		}
+	}
+}
+
+/* copy pixmaps of items of the current menu and of its ancestors into menu window */
+static void
+drawmenus(struct Menu *currmenu)
+{
+	struct Menu *menu;
+	struct Item *item;
+
+	for (menu = currmenu; menu != NULL; menu = menu->parent) {
+		if (!menu->drawn) {
+			drawitems(menu);
+			menu->drawn = 1;
+		}
+		for (item = menu->list; item != NULL; item = item->next) {
+			if (item == menu->selected)
+				XCopyArea(dpy, item->sel, menu->win, dc.gc, 0, 0,
+				          menu->w, item->h, 0, item->y);
+			else
+				XCopyArea(dpy, item->unsel, menu->win, dc.gc, 0, 0,
+				          menu->w, item->h, 0, item->y);
+		}
+	}
 }
 
 /* umap previous menus and map current menu and its parents */
@@ -751,94 +1066,6 @@ mapmenu(struct Menu *currmenu)
 	}
 
 	prevmenu = currmenu;
-}
-
-/* draw separator item */
-static void
-drawseparator(struct Menu *menu, struct Item *item)
-{
-	int y;
-
-	y = item->y + item->h/2;
-
-	XSetForeground(dpy, dc.gc, dc.separator.pixel);
-	XDrawLine(dpy, menu->pixmap, dc.gc, config.horzpadding, y,
-	          menu->w - config.horzpadding, y);
-}
-
-/* draw regular item */
-static void
-drawitem(struct Menu *menu, struct Item *item, XftColor *color)
-{
-	int x, y;
-
-	x = config.horzpadding;
-	x += (iflag) ? 0 : config.horzpadding + config.iconsize;
-	y = item->y + (item->h + dc.font->ascent) / 2;
-	XSetForeground(dpy, dc.gc, color[ColorFG].pixel);
-	XftDrawStringUtf8(menu->draw, &color[ColorFG], dc.font,
-	                  x, y, (XftChar8 *)item->label, item->labellen);
-
-	/* draw triangle, if item contains a submenu */
-	if (item->submenu != NULL) {
-		x = menu->w - config.triangle_width - config.horzpadding;
-		y = item->y + (item->h - config.triangle_height + 1) / 2;
-
-		XPoint triangle[] = {
-			{x, y},
-			{x + config.triangle_width, y + config.triangle_height/2},
-			{x, y + config.triangle_height},
-			{x, y}
-		};
-
-		XFillPolygon(dpy, menu->pixmap, dc.gc, triangle, LEN(triangle),
-		             Convex, CoordModeOrigin);
-	}
-
-	/* draw icon */
-	if (item->icon != NULL) {
-		x = config.horzpadding;
-		y = item->y + config.iconpadding;
-		if (color == dc.selected)
-			XCopyArea(dpy, item->sel, menu->pixmap, dc.gc, 0, 0,
-			          menu->w, menu->h, x, y);
-		else
-			XCopyArea(dpy, item->unsel, menu->pixmap, dc.gc, 0, 0,
-			          menu->w, menu->h, x, y);
-	}
-}
-
-/* draw items of the current menu and of its ancestors */
-static void
-drawmenu(struct Menu *currmenu)
-{
-	struct Menu *menu;
-	struct Item *item;
-
-	for (menu = currmenu; menu != NULL; menu = menu->parent) {
-		for (item = menu->list; item != NULL; item = item->next) {
-			XftColor *color;
-
-			/* determine item color */
-			if (item == menu->selected && item->label != NULL)
-				color = dc.selected;
-			else
-				color = dc.normal;
-
-			/* draw item box */
-			XSetForeground(dpy, dc.gc, color[ColorBG].pixel);
-			XFillRectangle(dpy, menu->pixmap, dc.gc, 0, item->y,
-			               menu->w, item->h);
-
-			if (item->label == NULL)  /* item is a separator */
-				drawseparator(menu, item);
-			else                      /* item is a regular item */
-				drawitem(menu, item, color);
-		}
-
-		XCopyArea(dpy, menu->pixmap, menu->win, dc.gc, 0, 0,
-			      menu->w, menu->h, 0, 0);
-	}
 }
 
 /* get menu of given window */
@@ -927,7 +1154,7 @@ run(struct Menu *currmenu)
 		switch(ev.type) {
 		case Expose:
 			if (ev.xexpose.count == 0)
-				drawmenu(currmenu);
+				drawmenus(currmenu);
 			break;
 		case MotionNotify:
 			menu = getmenu(currmenu, ev.xbutton.window);
@@ -943,7 +1170,7 @@ run(struct Menu *currmenu)
 				currmenu = menu;
 			}
 			mapmenu(currmenu);
-			drawmenu(currmenu);
+			drawmenus(currmenu);
 			break;
 		case ButtonRelease:
 			menu = getmenu(currmenu, ev.xbutton.window);
@@ -961,7 +1188,7 @@ selectitem:
 			}
 			mapmenu(currmenu);
 			currmenu->selected = currmenu->list;
-			drawmenu(currmenu);
+			drawmenus(currmenu);
 			break;
 		case ButtonPress:
 			menu = getmenu(currmenu, ev.xbutton.window);
@@ -997,12 +1224,12 @@ selectitem:
 			} else
 				break;
 			currmenu->selected = item;
-			drawmenu(currmenu);
+			drawmenus(currmenu);
 			break;
 		case LeaveNotify:
 			previtem = NULL;
 			currmenu->selected = NULL;
-			drawmenu(currmenu);
+			drawmenus(currmenu);
 			break;
 		case ConfigureNotify:
 			menu = getmenu(currmenu, ev.xconfigure.window);
@@ -1037,6 +1264,11 @@ cleanmenu(struct Menu *menu)
 		if (item->submenu != NULL)
 			cleanmenu(item->submenu);
 		tmp = item;
+		if (menu->drawn) {
+			XFreePixmap(dpy, item->unsel);
+			if (tmp->label != NULL)
+				XFreePixmap(dpy, item->sel);
+		}
 		if (tmp->label != tmp->output)
 			free(tmp->label);
 		free(tmp->output);
@@ -1051,8 +1283,6 @@ cleanmenu(struct Menu *menu)
 		free(tmp);
 	}
 
-	XFreePixmap(dpy, menu->pixmap);
-	XftDrawDestroy(menu->draw);
 	XDestroyWindow(dpy, menu->win);
 	free(menu);
 }
@@ -1061,6 +1291,8 @@ cleanmenu(struct Menu *menu)
 static void
 cleanup(void)
 {
+	size_t i;
+
 	XUngrabPointer(dpy, CurrentTime);
 	XUngrabKeyboard(dpy, CurrentTime);
 
@@ -1070,6 +1302,9 @@ cleanup(void)
 	XftColorFree(dpy, visual, colormap, &dc.selected[ColorFG]);
 	XftColorFree(dpy, visual, colormap, &dc.separator);
 	XftColorFree(dpy, visual, colormap, &dc.border);
+
+	for (i = 0; i < dc.nfonts; i++)
+		XftFontClose(dpy, dc.fonts[i]);
 
 	XFreeGC(dpy, dc.gc);
 	XCloseDisplay(dpy);

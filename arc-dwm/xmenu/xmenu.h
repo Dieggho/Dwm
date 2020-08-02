@@ -5,9 +5,10 @@
 #define ITEMNEXT 1
 
 /* macros */
-#define LEN(x) (sizeof (x) / sizeof (x[0]))
-#define MAX(x,y) ((x)>(y)?(x):(y))
-#define MIN(x,y) ((x)<(y)?(x):(y))
+#define LEN(x)              (sizeof (x) / sizeof (x[0]))
+#define MAX(x,y)            ((x)>(y)?(x):(y))
+#define MIN(x,y)            ((x)<(y)?(x):(y))
+#define BETWEEN(x, a, b)    ((a) <= (x) && (x) <= (b))
 
 /* color enum */
 enum {ColorFG, ColorBG, ColorLast};
@@ -35,10 +36,12 @@ struct Config {
 	int iconpadding;
 	int horzpadding;
 
-	/* the values below are computed by xmenu */
+	/* the values below are set by options */
+	int monitor;
+	int posx, posy;         /* rootmenu position */
+
+	/* the value below is computed by xmenu */
 	int iconsize;
-	int posx, posy;           /* cursor position */
-	int screenw, screenh;       /* screen width and height */
 };
 
 /* draw context structure */
@@ -49,7 +52,10 @@ struct DC {
 	XftColor separator;
 
 	GC gc;
-	XftFont *font;
+
+	FcPattern *pattern;
+	XftFont **fonts;
+	size_t nfonts;
 };
 
 /* menu item structure */
@@ -59,12 +65,16 @@ struct Item {
 	char *file;             /* filename of the icon */
 	int y;                  /* item y position relative to menu */
 	int h;                  /* item height */
-	size_t labellen;        /* strlen(label) */
 	struct Item *prev;      /* previous item */
 	struct Item *next;      /* next item */
 	struct Menu *submenu;   /* submenu spawned by clicking on item */
-	Drawable sel, unsel;    /* pixmap for selected and unselected icons */
+	Drawable sel, unsel;    /* pixmap for selected and unselected item */
 	Imlib_Image icon;
+};
+
+/* monitor geometry structure */
+struct Monitor {
+	int x, y, w, h;         /* monitor geometry */
 };
 
 /* menu structure */
@@ -74,8 +84,8 @@ struct Menu {
 	struct Item *list;      /* list of items contained by the menu */
 	struct Item *selected;  /* item currently selected in the menu */
 	int x, y, w, h;         /* menu geometry */
+	int hasicon;            /* whether the menu has item with icons */
+	int drawn;              /* whether the menu was already drawn */
 	unsigned level;         /* menu level relative to root */
-	Drawable pixmap;        /* pixmap to draw the menu on */
-	XftDraw *draw;
 	Window win;             /* menu window to map on the screen */
 };

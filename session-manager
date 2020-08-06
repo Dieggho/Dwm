@@ -1,8 +1,0 @@
-#!/bin/sh
-Icons=$HOME/.icons
-cat <<EOF | xmenu -p 0x19 | sh &
-IMG:$Icons/logoff.png	Logoff		pkill dwm
-IMG:$Icons/lock.png	Lock screen	lock
-IMG:$Icons/reboot.png	Reboot		reboot
-IMG:$Icons/poweroff.png	Shutdown	-terminalpoweroff
-EOF

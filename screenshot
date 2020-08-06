@@ -1,4 +1,0 @@
-#!/usr/bin/bash
-cd ~/Pictures/Screenshots
-shotgun
-notify-send "Screenshot" "taken at $(date) as $(ls -Art | tail -n 1)" -t 2500

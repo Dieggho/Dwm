@@ -1,6 +1,0 @@
-#!/bin/bash
-sleep 1
-xdo key_press -k 133
-xdo key_press -k 27
-xdo key_release -k 27
-xdo key_release -k 133

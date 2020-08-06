@@ -1,7 +1,0 @@
-#!/bin/sh
-Icons=$HOME/.icons
-cat <<EOF | xmenu -p 1100x19 | sh &
-IMG:$Icons/wireless.png	Iwd Shell	st-arc -e iwctl
-IMG:$Icons/wifion.png	Enable		iwctl device wlan0 set-property Powered on; notify-send --icon=network-wireless 'Network Manager' 'Wifi Enabled'
-IMG:$Icons/wifioff.png	Disable		iwctl device wlan0 set-property Powered off; notify-send --icon=network-wireless 'Network Manager' 'Wifi Disabled'
-EOF

@@ -12,7 +12,10 @@ export PATH=$PATH:$HOME/.sh
 # User specific aliases and functions
 PS1='\[\033[01;34m\]\u@\h\[\033[00m\]:\[\033[01;38m\]\w\[\033[00m\]\$ '
 
-
+## Pseudo Sudo
+sudo(){
+	su -c "$*"
+}
 
 ## Colorize the ls output ##
 alias ls='ls --color=auto'
@@ -53,6 +56,8 @@ alias weather="curl -4 http://wttr.in/Sao-Paulo"
 
 alias myarch="archey3;pacman --version"
 alias myip="curl ifconfig.co"
+
+alias sysdl="systemctl --type=service"
 
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_PLATFORMTHEME=qt5ct
